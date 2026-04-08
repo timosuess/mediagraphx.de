@@ -3,17 +3,19 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Globe, PenTool, Layers, Printer, Search, Camera, Monitor, FileCode } from "lucide-react";
+import { Globe, PenTool, Layers, Printer, Search, Camera, Truck } from "lucide-react";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const services = [
-  { icon: Globe, title: "Webdesign", text: "Moderne, responsive Internetseiten die begeistern und verkaufen. Mit aktuellem CMS fuer Ihre Unabhaengigkeit." },
-  { icon: PenTool, title: "Logoentwicklung", text: "Ein Logo ist die Essenz Ihrer Marke. Wir entwickeln Zeichen die im Kopf bleiben und Wiedererkennungswert schaffen." },
-  { icon: Layers, title: "Corporate Design", text: "Vom Briefbogen bis zur Fahrzeugbeschriftung - wir gestalten Ihren einheitlichen, unverwechselbaren Markenauftritt." },
-  { icon: Printer, title: "Printwerbung", text: "Flyer, Broschueren, Plakate und mehr. Hochwertige Druckprodukte die in der Hand ueberzeugen." },
-  { icon: Search, title: "SEO", text: "Gefunden werden, wenn es zaehlt. Suchmaschinenoptimierung mit messbaren Ergebnissen." },
-  { icon: Camera, title: "Fotografie", text: "Professionelle Bilder erzaehlen Ihre Geschichte. Produkt-, Team- und Eventfotografie." },
+  { icon: Globe, title: "Webdesign", text: "Moderne, responsive Internetseiten die begeistern und verkaufen. Mit aktuellem CMS fuer Ihre Unabhaengigkeit.", link: null },
+  { icon: PenTool, title: "Logoentwicklung", text: "Ein Logo ist die Essenz Ihrer Marke. Wir entwickeln Zeichen die im Kopf bleiben und Wiedererkennungswert schaffen.", link: null },
+  { icon: Layers, title: "Corporate Design", text: "Vom Briefbogen bis zur Fahrzeugbeschriftung - wir gestalten Ihren einheitlichen, unverwechselbaren Markenauftritt.", link: null },
+  { icon: Truck, title: "Fahrzeugbeschriftung", text: "Ihr Fahrzeug als mobile Visitenkarte. Vom Schriftzug bis zur Komplett-Beklebung - professionell und praezise.", link: "/fahrzeugbeschriftung" },
+  { icon: Printer, title: "Printwerbung", text: "Flyer, Broschueren, Plakate und mehr. Hochwertige Druckprodukte die in der Hand ueberzeugen.", link: null },
+  { icon: Search, title: "SEO", text: "Gefunden werden, wenn es zaehlt. Suchmaschinenoptimierung mit messbaren Ergebnissen.", link: null },
+  { icon: Camera, title: "Fotografie", text: "Professionelle Bilder erzaehlen Ihre Geschichte. Produkt-, Team- und Eventfotografie.", link: null },
 ];
 
 export default function ServicesCards() {
@@ -55,11 +57,19 @@ export default function ServicesCards() {
                 {s.title}
               </h3>
               <p className="text-grey-medium text-sm leading-relaxed mb-4">{s.text}</p>
-              <a href="#kontakt" onClick={(e) => { e.preventDefault(); document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" }); }}
-                className="text-orange text-sm font-semibold hover:text-orange-dark transition-colors flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full border-2 border-orange flex items-center justify-center text-[10px]">&rarr;</span>
-                Mehr erfahren
-              </a>
+              {s.link ? (
+                <Link href={s.link}
+                  className="text-orange text-sm font-semibold hover:text-orange-dark transition-colors flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full border-2 border-orange flex items-center justify-center text-[10px]">&rarr;</span>
+                  Projekte ansehen
+                </Link>
+              ) : (
+                <a href="#kontakt" onClick={(e) => { e.preventDefault(); document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" }); }}
+                  className="text-orange text-sm font-semibold hover:text-orange-dark transition-colors flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full border-2 border-orange flex items-center justify-center text-[10px]">&rarr;</span>
+                  Mehr erfahren
+                </a>
+              )}
             </div>
           ))}
         </div>

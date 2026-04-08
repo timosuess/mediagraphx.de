@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { Menu, X, Clock, Mail as MailIcon } from "lucide-react";
 import Image from "next/image";
 
+import Link from "next/link";
+
 const navLinks = [
-  { href: "#start", label: "Start" },
-  { href: "#agentur", label: "Agentur" },
-  { href: "#leistungen", label: "Leistungen" },
-  { href: "#arbeiten", label: "Arbeiten" },
-  { href: "#kontakt", label: "Kontakt" },
+  { href: "#start", label: "Start", anchor: true },
+  { href: "#agentur", label: "Agentur", anchor: true },
+  { href: "#leistungen", label: "Leistungen", anchor: true },
+  { href: "/fahrzeugbeschriftung", label: "Fahrzeugbeschriftung", anchor: false },
+  { href: "#arbeiten", label: "Arbeiten", anchor: true },
+  { href: "#kontakt", label: "Kontakt", anchor: true },
 ];
 
 export default function Navigation() {
@@ -62,12 +65,19 @@ export default function Navigation() {
           </a>
 
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-heading font-semibold text-grey-dark hover:text-orange transition-colors duration-300 uppercase tracking-wider relative after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-orange after:rounded-full after:opacity-0 hover:after:opacity-100 after:transition-opacity">
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.anchor ? (
+                <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)}
+                  className="text-sm font-heading font-semibold text-grey-dark hover:text-orange transition-colors duration-300 uppercase tracking-wider relative after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-orange after:rounded-full after:opacity-0 hover:after:opacity-100 after:transition-opacity">
+                  {link.label}
+                </a>
+              ) : (
+                <Link key={link.href} href={link.href}
+                  className="text-sm font-heading font-semibold text-grey-dark hover:text-orange transition-colors duration-300 uppercase tracking-wider relative after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-orange after:rounded-full after:opacity-0 hover:after:opacity-100 after:transition-opacity">
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
           <button className="md:hidden text-grey-dark hover:text-orange transition-colors"
@@ -80,12 +90,19 @@ export default function Navigation() {
           mobileOpen ? "max-h-80 border-t border-grey-light/30" : "max-h-0"
         }`}>
           <div className="px-6 py-6 flex flex-col gap-5">
-            {navLinks.map((link) => (
-              <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)}
-                className="text-lg font-heading font-semibold text-grey-dark hover:text-orange transition-colors uppercase">
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.anchor ? (
+                <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)}
+                  className="text-lg font-heading font-semibold text-grey-dark hover:text-orange transition-colors uppercase">
+                  {link.label}
+                </a>
+              ) : (
+                <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
+                  className="text-lg font-heading font-semibold text-grey-dark hover:text-orange transition-colors uppercase">
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
         </div>
       </nav>
