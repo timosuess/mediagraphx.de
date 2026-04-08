@@ -34,11 +34,12 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 text-center px-6 max-w-4xl">
-        <p className="hero-sub text-orange font-heading font-semibold text-sm uppercase tracking-[0.4em] mb-6">
-          Willkommen bei
-        </p>
-        <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl text-white leading-[0.95] tracking-tight mb-6" style={{ fontFamily: "var(--font-marker), cursive" }}>
-          MEDIA<span className="text-orange">GRAPH</span>X
+        <div className="hero-sub mb-6">
+          <Image src="/images/logo_mdgx.png" alt="MediaGraphX" width={400} height={250}
+            className="w-[200px] md:w-[300px] lg:w-[360px] h-auto mx-auto" />
+        </div>
+        <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl text-white leading-[1] tracking-tight mb-6" style={{ fontFamily: "var(--font-marker), cursive" }}>
+          #kreatieffsinn
         </h1>
         <p className="hero-claim text-white/70 text-lg md:text-2xl font-light max-w-2xl mx-auto mb-10">
           Idee. Konzept. Design. — Ihre Full-Service Werbeagentur im Westerwald seit 2002.
