@@ -23,7 +23,7 @@ export default function Testimonials() {
     <section className="py-20 md:py-28 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="font-heading font-bold text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4">
+          <h2 className="text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
             Das sagen unsere Kunden
           </h2>
         </div>

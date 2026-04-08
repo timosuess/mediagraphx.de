@@ -87,7 +87,7 @@ export default function VehicleWrap() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="vw-heading font-heading font-bold text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4">
+            <h2 className="vw-heading text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
               Fahrzeugbeschriftung & Beklebung
             </h2>
             <p className="vw-heading text-grey-medium leading-relaxed italic">

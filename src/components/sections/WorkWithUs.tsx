@@ -14,7 +14,7 @@ export default function WorkWithUs() {
         <h3 className="font-heading font-bold text-orange text-sm uppercase tracking-[0.3em] mb-4">
           Zusammenarbeit
         </h3>
-        <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-white leading-tight mb-8">
+        <h2 className="text-3xl md:text-5xl text-white leading-tight mb-8" style={{ fontFamily: "var(--font-marker), cursive" }}>
           Seit ueber 20 Jahren gestalten wir erfolgreiche Markenauftritte im Westerwald
         </h2>
         <a href="#kontakt" onClick={(e: React.MouseEvent) => { e.preventDefault(); document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" }); }}

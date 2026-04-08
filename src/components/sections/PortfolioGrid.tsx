@@ -33,7 +33,7 @@ export default function PortfolioGrid() {
     <section ref={ref} id="arbeiten" className="py-20 md:py-28 px-6 bg-grey-subtle">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="font-heading font-bold text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4">
+          <h2 className="text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
             Ausgewaehlte Arbeiten
           </h2>
           <p className="text-grey-medium leading-relaxed italic">
