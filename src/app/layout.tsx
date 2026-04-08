@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Syne, Caveat } from "next/font/google";
+import { DM_Sans, Syne, Caveat, Permanent_Marker } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -18,6 +18,12 @@ const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const permanentMarker = Permanent_Marker({
+  variable: "--font-marker",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -53,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${dmSans.variable} ${syne.variable} ${caveat.variable} antialiased`}
+      className={`${dmSans.variable} ${syne.variable} ${caveat.variable} ${permanentMarker.variable} antialiased`}
     >
       <body>{children}</body>
     </html>

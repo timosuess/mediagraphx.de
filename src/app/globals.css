@@ -15,6 +15,7 @@
   --font-sans: var(--font-dm-sans);
   --font-heading: var(--font-syne);
   --font-script: var(--font-caveat);
+  --font-marker: var(--font-marker);
 }
 
 /* Lenis smooth scroll */

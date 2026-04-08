@@ -37,7 +37,7 @@ export default function HeroSection() {
         <p className="hero-sub text-orange font-heading font-semibold text-sm uppercase tracking-[0.4em] mb-6">
           Willkommen bei
         </p>
-        <h1 className="hero-title font-heading text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[0.95] tracking-tight mb-6">
+        <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl text-white leading-[0.95] tracking-tight mb-6" style={{ fontFamily: "var(--font-marker), cursive" }}>
           MEDIA<span className="text-orange">GRAPH</span>X
         </h1>
         <p className="hero-claim text-white/70 text-lg md:text-2xl font-light max-w-2xl mx-auto mb-10">
