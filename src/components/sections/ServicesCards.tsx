@@ -24,9 +24,30 @@ export default function ServicesCards() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Heading reveal with scrub
+      gsap.from(".services-heading", {
+        scrollTrigger: { trigger: ".services-heading", start: "top 85%", end: "top 60%", scrub: 1 },
+        y: 60, opacity: 0,
+      });
+
+      // Cards stagger with individual triggers for each row
       gsap.from(".service-card", {
         scrollTrigger: { trigger: ".services-grid", start: "top 80%" },
-        y: 50, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power3.out",
+        y: 80, opacity: 0, duration: 0.8, stagger: 0.12, ease: "power3.out",
+      });
+
+      // Parallax on the icon boxes
+      gsap.utils.toArray<HTMLElement>(".service-icon-box").forEach((box) => {
+        gsap.to(box, {
+          yPercent: -15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: box,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       });
     }, ref);
     return () => ctx.revert();
@@ -36,7 +57,7 @@ export default function ServicesCards() {
     <section ref={ref} id="leistungen" className="py-20 md:py-28 px-6 bg-warm-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
+          <h2 className="services-heading text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
             Unsere Leistungen
           </h2>
           <p className="text-grey-medium leading-relaxed italic">
@@ -48,7 +69,7 @@ export default function ServicesCards() {
         <div className="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((s) => (
             <div key={s.title} className="service-card group">
-              <div className="relative overflow-hidden mb-6">
+              <div className="service-icon-box relative overflow-hidden mb-6">
                 {s.image ? (
                   <div className="relative w-full h-48">
                     <Image src={s.image} alt={s.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />

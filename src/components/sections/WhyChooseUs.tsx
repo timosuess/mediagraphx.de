@@ -21,19 +21,39 @@ export default function WhyChooseUs() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Heading scrub reveal
+      gsap.from(".why-heading", {
+        scrollTrigger: { trigger: ".why-heading", start: "top 85%", end: "top 55%", scrub: 1 },
+        y: 60, opacity: 0,
+      });
+
+      // Stagger cards with rotation
       gsap.from(".why-item", {
         scrollTrigger: { trigger: ".why-grid", start: "top 80%" },
-        y: 40, opacity: 0, duration: 0.5, stagger: 0.08, ease: "power3.out",
+        y: 60, opacity: 0, rotateX: 15, duration: 0.7, stagger: 0.1, ease: "power3.out",
+        transformPerspective: 600, transformOrigin: "top center",
+      });
+
+      // Parallax on the big X
+      gsap.to(".why-big-x", {
+        yPercent: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
       });
     }, ref);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={ref} id="agentur" className="py-20 md:py-28 px-6 bg-warm-white">
+    <section ref={ref} id="agentur" className="py-20 md:py-28 px-6 bg-warm-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
+          <h2 className="why-heading text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
             Warum MediaGraphX?
           </h2>
           <p className="text-grey-medium leading-relaxed italic">
@@ -42,9 +62,9 @@ export default function WhyChooseUs() {
           </p>
         </div>
 
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 relative">
           <div className="inline-block relative w-full max-w-3xl aspect-[16/7] bg-grey-subtle overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="why-big-x absolute inset-0 flex items-center justify-center">
               <span className="font-heading font-extrabold text-[8rem] md:text-[12rem] text-grey-subtle select-none leading-none">X</span>
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -56,7 +76,7 @@ export default function WhyChooseUs() {
           </div>
         </div>
 
-        <div className="why-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="why-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ perspective: "600px" }}>
           {reasons.map((r) => (
             <div key={r.title} className="why-item flex gap-4 p-6 hover:bg-white hover:shadow-md transition-all duration-300">
               <CheckCircle className="w-5 h-5 text-orange shrink-0 mt-1" strokeWidth={2} />

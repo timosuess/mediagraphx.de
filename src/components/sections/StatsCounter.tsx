@@ -26,7 +26,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
         const obj = { val: 0 };
         gsap.to(obj, {
           val: value,
-          duration: 2,
+          duration: 2.5,
           ease: "power2.out",
           onUpdate: () => setCount(Math.floor(obj.val)),
         });
@@ -39,12 +39,25 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function StatsCounter() {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Scale in from small
+      gsap.from(".stat-box", {
+        scrollTrigger: { trigger: ref.current, start: "top 85%" },
+        scale: 0.8, opacity: 0, duration: 0.6, stagger: 0.1, ease: "back.out(1.4)",
+      });
+    }, ref);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="bg-orange py-14 md:py-16">
+    <section ref={ref} className="bg-orange py-14 md:py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((s) => (
-            <div key={s.label}>
+            <div key={s.label} className="stat-box">
               <p className="font-heading font-extrabold text-4xl md:text-5xl text-white mb-2">
                 <Counter value={s.value} suffix={s.suffix} />
               </p>
