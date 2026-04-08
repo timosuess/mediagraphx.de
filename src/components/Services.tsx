@@ -12,9 +12,7 @@ import {
   Layers,
   Monitor,
   FileCode,
-  ArrowRight,
 } from "lucide-react";
-import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -155,17 +153,6 @@ export default function Services() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Link to A-Z page */}
-        <div className="mt-16 text-center">
-          <Link
-            href="/leistungen"
-            className="inline-flex items-center gap-3 px-8 py-4 border-2 border-orange text-orange font-heading font-semibold text-sm uppercase tracking-widest hover:bg-orange hover:text-white transition-all duration-300 rounded-sm group"
-          >
-            Alle Leistungen A-Z entdecken
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
         </div>
       </div>
     </section>

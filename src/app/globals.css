@@ -93,3 +93,30 @@ img {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-orange);
 }
+
+/* Vertical writing mode for sidebar */
+.writing-vertical-lr {
+  writing-mode: vertical-lr;
+}
+
+/* fullPage.js navigation dots */
+#fp-nav ul li a span,
+.fp-slidesNav ul li a span {
+  background: var(--color-grey-light) !important;
+  width: 8px !important;
+  height: 8px !important;
+  margin: -4px 0 0 -4px !important;
+}
+
+#fp-nav ul li a.active span,
+.fp-slidesNav ul li a.active span {
+  background: var(--color-orange) !important;
+}
+
+#fp-nav ul li .fp-tooltip {
+  font-family: var(--font-heading) !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  color: var(--color-grey-dark) !important;
+}
