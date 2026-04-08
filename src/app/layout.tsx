@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Syne, Caveat, Permanent_Marker } from "next/font/google";
 import "./globals.css";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -61,7 +62,10 @@ export default function RootLayout({
       lang="de"
       className={`${dmSans.variable} ${syne.variable} ${caveat.variable} ${permanentMarker.variable} antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <WhatsAppButton />
+      </body>
     </html>
   );
 }
