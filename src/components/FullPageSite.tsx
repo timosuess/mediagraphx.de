@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import ReactFullpage from "@fullpage/react-fullpage";
 import Image from "next/image";
 import {
@@ -58,90 +58,15 @@ const projects = [
 export default function FullPageSite() {
   const [activeSection, setActiveSection] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [hintVisible, setHintVisible] = useState(false);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const peelPageRef = useRef<HTMLDivElement>(null);
-  const isAnimating = useRef(false);
-
-  // Show peel hint after initial load
-  useEffect(() => {
-    const timer = setTimeout(() => setHintVisible(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const runPeel = useCallback(
-    (originEl: HTMLElement, direction: string) => {
-      if (isAnimating.current || !overlayRef.current || !peelPageRef.current) return;
-      isAnimating.current = true;
-      setHintVisible(false);
-
-      // Clone the origin section into peel overlay
-      const clone = originEl.cloneNode(true) as HTMLElement;
-      clone.style.position = "absolute";
-      clone.style.inset = "0";
-      clone.style.width = "100vw";
-      clone.style.height = "100vh";
-      clone.style.margin = "0";
-      clone.style.zIndex = "1";
-
-      peelPageRef.current.innerHTML = "";
-      peelPageRef.current.appendChild(clone);
-      overlayRef.current.style.display = "block";
-
-      // Trigger animation
-      const animClass = direction === "down" ? "peel-animate-down" : "peel-animate-up";
-      peelPageRef.current.classList.remove("peel-animate-down", "peel-animate-up");
-      // Force reflow
-      void peelPageRef.current.offsetWidth;
-      peelPageRef.current.classList.add(animClass);
-
-      // Cleanup after animation
-      setTimeout(() => {
-        if (overlayRef.current) overlayRef.current.style.display = "none";
-        if (peelPageRef.current) {
-          peelPageRef.current.classList.remove(animClass);
-          peelPageRef.current.innerHTML = "";
-        }
-        isAnimating.current = false;
-        setTimeout(() => setHintVisible(true), 300);
-      }, 1250);
+  const onLeave = useCallback(
+    (_origin: unknown, destination: { index: number }) => {
+      setActiveSection(destination.index);
     },
     []
   );
 
-  const onLeave = useCallback(
-    (origin: { item: HTMLElement; index: number }, destination: { index: number }, direction: string) => {
-      if (isAnimating.current) return false;
-      setActiveSection(destination.index);
-      runPeel(origin.item, direction);
-      return true;
-    },
-    [runPeel]
-  );
-
   return (
     <>
-      {/* ─── Peel Hint (orange corner fold) ─── */}
-      <div className={`peel-hint ${hintVisible ? "visible" : ""}`}>
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="hintGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#F0A030" />
-              <stop offset="100%" stopColor="#E8941A" />
-            </linearGradient>
-            <filter id="hintShadow">
-              <feDropShadow dx="-2" dy="2" stdDeviation="3" floodOpacity="0.25" />
-            </filter>
-          </defs>
-          <path d="M80,0 L80,80 L0,0 Z" fill="url(#hintGrad)" filter="url(#hintShadow)" />
-        </svg>
-      </div>
-
-      {/* ─── Peel Overlay ─── */}
-      <div ref={overlayRef} className="peel-overlay">
-        <div ref={peelPageRef} className="peel-page" />
-      </div>
-
       {/* ─── Fixed Navigation ─── */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -221,10 +146,8 @@ export default function FullPageSite() {
       <ReactFullpage
         licenseKey=""
         credits={{ enabled: false }}
-        scrollingSpeed={0}
+        scrollingSpeed={900}
         anchors={navAnchors}
-        navigation
-        navigationPosition="right"
         navigationTooltips={navLabels}
         onLeave={onLeave}
         css3
