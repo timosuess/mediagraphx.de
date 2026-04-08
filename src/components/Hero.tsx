@@ -3,44 +3,24 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const claimRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(".hero-logo-icon", {
-        scale: 0,
-        rotation: -180,
-        duration: 0.8,
+      tl.from(".hero-logo", {
+        scale: 0.8,
+        opacity: 0,
+        duration: 1,
         delay: 0.3,
       })
         .from(
-          ".hero-logo-text span",
-          {
-            y: 60,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.08,
-          },
-          "-=0.3"
-        )
-        .from(
-          headingRef.current,
-          {
-            y: 40,
-            opacity: 0,
-            duration: 0.8,
-          },
-          "-=0.2"
-        )
-        .from(
-          claimRef.current,
+          ".hero-subtitle",
           {
             y: 30,
             opacity: 0,
@@ -111,35 +91,20 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-4xl">
-        {/* Logo Icon */}
-        <div className="hero-logo-icon w-20 h-20 md:w-24 md:h-24 bg-linear-to-br from-orange-light via-orange to-orange-dark rounded-lg flex items-center justify-center mb-8 shadow-lg shadow-orange-glow">
-          <span className="text-white font-heading font-extrabold text-4xl md:text-5xl leading-none">
-            X
-          </span>
+        {/* Full Logo Image */}
+        <div className="hero-logo mb-8">
+          <Image
+            src="/images/logo_mdgx.png"
+            alt="MediaGraphX - Idee. Konzept. Design."
+            width={400}
+            height={250}
+            priority
+            className="w-[280px] md:w-[380px] lg:w-[440px] h-auto"
+          />
         </div>
-
-        {/* MediaGraphX Text */}
-        <div className="hero-logo-text overflow-hidden mb-6">
-          <h2 className="font-heading text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            <span className="inline-block text-grey-medium">Media</span>
-            <span className="inline-block text-orange">Graph</span>
-            <span className="inline-block text-grey-dark">X</span>
-          </h2>
-        </div>
-
-        {/* Claim - handwritten style */}
-        <h1
-          ref={headingRef}
-          className="font-script text-3xl md:text-5xl lg:text-6xl text-orange mb-4"
-        >
-          Idee. Konzept. Design.
-        </h1>
 
         {/* Subtitle */}
-        <p
-          ref={claimRef}
-          className="text-grey-medium text-lg md:text-xl max-w-2xl leading-relaxed mb-10"
-        >
+        <p className="hero-subtitle text-grey-medium text-lg md:text-xl max-w-2xl leading-relaxed mb-10">
           Ihr Partner fuer alles - Print und Digital.
           <br className="hidden md:block" />
           Werbeagentur aus Altenkirchen, seit 2002. Ueber 20 Jahre Erfahrung.

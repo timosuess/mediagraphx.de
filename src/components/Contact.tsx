@@ -1,14 +1,25 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useActionState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { MapPin, Phone, Smartphone, Mail, Globe, Clock } from "lucide-react";
+import { MapPin, Phone, Smartphone, Mail, Globe, Clock, Send, CheckCircle, AlertCircle } from "lucide-react";
+import { sendContactForm, type ContactFormState } from "@/app/actions/contact";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const initialState: ContactFormState = { success: false, error: null };
+
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction, isPending] = useActionState(sendContactForm, initialState);
+
+  useEffect(() => {
+    if (state.success && formRef.current) {
+      formRef.current.reset();
+    }
+  }, [state.success]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -174,8 +185,33 @@ export default function Contact() {
                 Erzaehlen Sie uns von Ihrem Vorhaben. Wir melden uns zeitnah.
               </p>
 
+              {/* Success message */}
+              {state.success && (
+                <div className="mb-8 p-5 bg-green-50 border border-green-200 rounded-sm flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-green-800 font-medium">Nachricht gesendet!</p>
+                    <p className="text-green-700 text-sm mt-1">
+                      Vielen Dank fuer Ihre Anfrage. Wir melden uns zeitnah bei Ihnen.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Error message */}
+              {state.error && (
+                <div className="mb-8 p-5 bg-red-50 border border-red-200 rounded-sm flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-red-800 font-medium">Fehler beim Senden</p>
+                    <p className="text-red-700 text-sm mt-1">{state.error}</p>
+                  </div>
+                </div>
+              )}
+
               <form
-                onSubmit={(e) => e.preventDefault()}
+                ref={formRef}
+                action={formAction}
                 className="space-y-6"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,7 +227,8 @@ export default function Contact() {
                       id="name"
                       name="name"
                       required
-                      className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all"
+                      disabled={isPending}
+                      className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all disabled:opacity-50"
                       placeholder="Ihr Name"
                     />
                   </div>
@@ -207,7 +244,8 @@ export default function Contact() {
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all"
+                      disabled={isPending}
+                      className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all disabled:opacity-50"
                       placeholder="ihre@email.de"
                     />
                   </div>
@@ -223,7 +261,8 @@ export default function Contact() {
                   <select
                     id="subject"
                     name="subject"
-                    className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all"
+                    disabled={isPending}
+                    className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all disabled:opacity-50"
                   >
                     <option value="">Bitte waehlen...</option>
                     <option value="webdesign">Webdesign</option>
@@ -247,17 +286,29 @@ export default function Contact() {
                     id="message"
                     name="message"
                     required
+                    disabled={isPending}
                     rows={5}
-                    className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all resize-none"
+                    className="w-full px-4 py-3 bg-white border border-grey-light/60 rounded-sm text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all resize-none disabled:opacity-50"
                     placeholder="Erzaehlen Sie uns von Ihrem Projekt..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="px-10 py-4 bg-orange text-white font-heading font-semibold text-sm uppercase tracking-widest hover:bg-orange-dark transition-all duration-300 rounded-sm shadow-lg shadow-orange-glow hover:shadow-xl hover:shadow-orange-glow hover:-translate-y-0.5"
+                  disabled={isPending}
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-orange text-white font-heading font-semibold text-sm uppercase tracking-widest hover:bg-orange-dark transition-all duration-300 rounded-sm shadow-lg shadow-orange-glow hover:shadow-xl hover:shadow-orange-glow hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
                 >
-                  Nachricht senden
+                  {isPending ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Wird gesendet...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Nachricht senden
+                    </>
+                  )}
                 </button>
               </form>
             </div>

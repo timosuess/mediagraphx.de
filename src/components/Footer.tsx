@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -12,15 +14,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           {/* Brand */}
           <div className="md:col-span-5">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-9 h-9 bg-orange rounded-sm flex items-center justify-center">
-                <span className="text-white font-heading font-extrabold text-lg leading-none">
-                  X
-                </span>
-              </div>
-              <span className="font-heading font-bold text-lg tracking-tight">
-                Media<span className="text-orange">Graph</span>X
-              </span>
+            <div className="mb-6">
+              <Image
+                src="/images/logo_mdgx_nav.png"
+                alt="MediaGraphX"
+                width={160}
+                height={72}
+                className="h-14 w-auto brightness-0 invert"
+              />
             </div>
             <p className="font-script text-xl text-orange/80 mb-4">
               Idee. Konzept. Design.

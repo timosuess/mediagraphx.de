@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 const navLinks = [
   { href: "#start", label: "Start" },
@@ -43,18 +44,16 @@ export default function Navigation() {
         <a
           href="#start"
           onClick={(e) => handleNavClick(e, "#start")}
-          className="flex items-center gap-3 group"
+          className="group"
         >
-          <div className="w-9 h-9 bg-orange rounded-sm flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
-            <span className="text-white font-heading font-extrabold text-lg leading-none">X</span>
-          </div>
-          <span
-            className={`font-heading font-bold text-lg tracking-tight transition-colors duration-300 ${
-              scrolled ? "text-grey-dark" : "text-grey-dark"
-            }`}
-          >
-            Media<span className="text-orange">Graph</span>X
-          </span>
+          <Image
+            src="/images/logo_mdgx_nav.png"
+            alt="MediaGraphX"
+            width={160}
+            height={72}
+            priority
+            className="h-10 md:h-12 w-auto group-hover:opacity-80 transition-opacity duration-300"
+          />
         </a>
 
         {/* Desktop Links */}

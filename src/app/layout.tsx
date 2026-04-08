@@ -21,6 +21,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.mdgx.de"),
   title: "MediaGraphX | Idee. Konzept. Design. | Werbeagentur Altenkirchen",
   description:
     "MediaGraphX - Ihre Full-Service Werbeagentur in Altenkirchen. Webdesign, Logoentwicklung, Corporate Design, Printwerbung und mehr. Inhaber Timo Suess.",
