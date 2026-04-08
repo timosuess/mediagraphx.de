@@ -66,7 +66,7 @@ export default function HeroSection() {
             className="w-[200px] md:w-[300px] lg:w-[360px] h-auto mx-auto" />
         </div>
         <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl text-white leading-[1] tracking-tight mb-6" style={{ fontFamily: "var(--font-marker), cursive" }}>
-          #kreatieffsinn
+          #kreatiefsinn
         </h1>
         <p className="hero-claim text-white/70 text-lg md:text-2xl font-light max-w-2xl mx-auto mb-10">
           Idee. Konzept. Design. — Ihre Full-Service Werbeagentur im Westerwald seit 2002.
