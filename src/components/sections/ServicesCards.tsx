@@ -5,17 +5,18 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Globe, PenTool, Layers, Printer, Search, Camera, Truck } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const services = [
-  { icon: Globe, title: "Webdesign", text: "Moderne, responsive Internetseiten die begeistern und verkaufen. Mit aktuellem CMS fuer Ihre Unabhaengigkeit.", link: null },
-  { icon: PenTool, title: "Logoentwicklung", text: "Ein Logo ist die Essenz Ihrer Marke. Wir entwickeln Zeichen die im Kopf bleiben und Wiedererkennungswert schaffen.", link: null },
-  { icon: Layers, title: "Corporate Design", text: "Vom Briefbogen bis zur Fahrzeugbeschriftung - wir gestalten Ihren einheitlichen, unverwechselbaren Markenauftritt.", link: null },
-  { icon: Truck, title: "Fahrzeugbeschriftung", text: "Ihr Fahrzeug als mobile Visitenkarte. Vom Schriftzug bis zur Komplett-Beklebung - professionell und praezise.", link: "/fahrzeugbeschriftung" },
-  { icon: Printer, title: "Printwerbung", text: "Flyer, Broschueren, Plakate und mehr. Hochwertige Druckprodukte die in der Hand ueberzeugen.", link: null },
-  { icon: Search, title: "SEO", text: "Gefunden werden, wenn es zaehlt. Suchmaschinenoptimierung mit messbaren Ergebnissen.", link: null },
-  { icon: Camera, title: "Fotografie", text: "Professionelle Bilder erzaehlen Ihre Geschichte. Produkt-, Team- und Eventfotografie.", link: null },
+  { icon: Globe, title: "Webdesign", text: "Moderne, responsive Internetseiten die begeistern und verkaufen. Mit aktuellem CMS fuer Ihre Unabhaengigkeit.", link: null, image: null },
+  { icon: PenTool, title: "Logoentwicklung", text: "Ein Logo ist die Essenz Ihrer Marke. Wir entwickeln Zeichen die im Kopf bleiben und Wiedererkennungswert schaffen.", link: null, image: null },
+  { icon: Layers, title: "Corporate Design", text: "Vom Briefbogen bis zur Fahrzeugbeschriftung - wir gestalten Ihren einheitlichen, unverwechselbaren Markenauftritt.", link: null, image: null },
+  { icon: Truck, title: "Fahrzeugbeschriftung", text: "Ihr Fahrzeug als mobile Visitenkarte. Vom Schriftzug bis zur Komplett-Beklebung - professionell und praezise.", link: "/fahrzeugbeschriftung", image: "/images/fahrzeug/IMG_0663.jpg" },
+  { icon: Printer, title: "Printwerbung", text: "Flyer, Broschueren, Plakate und mehr. Hochwertige Druckprodukte die in der Hand ueberzeugen.", link: null, image: null },
+  { icon: Search, title: "SEO", text: "Gefunden werden, wenn es zaehlt. Suchmaschinenoptimierung mit messbaren Ergebnissen.", link: null, image: null },
+  { icon: Camera, title: "Fotografie", text: "Professionelle Bilder erzaehlen Ihre Geschichte. Produkt-, Team- und Eventfotografie.", link: null, image: null },
 ];
 
 export default function ServicesCards() {
@@ -48,10 +49,16 @@ export default function ServicesCards() {
           {services.map((s) => (
             <div key={s.title} className="service-card group">
               <div className="relative overflow-hidden mb-6">
-                <div className="w-full h-48 bg-grey-subtle flex items-center justify-center group-hover:bg-orange/10 transition-colors duration-500">
-                  <s.icon className="w-12 h-12 text-grey-medium group-hover:text-orange transition-colors duration-500" strokeWidth={1} />
-                </div>
-                <div className="absolute inset-0 bg-orange/0 group-hover:bg-orange/5 transition-all duration-500" />
+                {s.image ? (
+                  <div className="relative w-full h-48">
+                    <Image src={s.image} alt={s.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-orange/0 group-hover:bg-orange/20 transition-all duration-500" />
+                  </div>
+                ) : (
+                  <div className="w-full h-48 bg-grey-subtle flex items-center justify-center group-hover:bg-orange/10 transition-colors duration-500">
+                    <s.icon className="w-12 h-12 text-grey-medium group-hover:text-orange transition-colors duration-500" strokeWidth={1} />
+                  </div>
+                )}
               </div>
               <h3 className="font-heading font-bold text-lg text-grey-dark uppercase tracking-wide mb-3 group-hover:text-orange transition-colors">
                 {s.title}
