@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #FEFCF9;
+  --color-foreground: #2A2A2A;
+  --color-orange: #E8941A;
+  --color-orange-light: #F0A030;
+  --color-orange-dark: #C87A10;
+  --color-orange-glow: #E8941A33;
+  --color-grey-dark: #3A3A3A;
+  --color-grey-medium: #8C8C8C;
+  --color-grey-light: #D4D4D4;
+  --color-grey-subtle: #F0EEEB;
+  --color-warm-white: #FEFCF9;
+  --font-sans: var(--font-dm-sans);
+  --font-heading: var(--font-syne);
+  --font-script: var(--font-caveat);
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-orange);
+  color: white;
+}
+
+/* Decorative curve SVG background */
+.bg-curves {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cpath d='M-100 400 C200 200 400 600 700 350 S1100 100 1500 400' fill='none' stroke='%23E8E8E8' stroke-width='1.5'/%3E%3Cpath d='M-100 500 C250 300 450 700 750 450 S1150 200 1500 500' fill='none' stroke='%23EFEFEF' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Orange accent bar - like the CI */
+.orange-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-orange) 0%, var(--color-orange-light) 100%);
+}
+
+/* Text reveal animation helper */
+.reveal-text {
+  clip-path: inset(0 0 100% 0);
+}
+
+.reveal-text.revealed {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Smooth image loading */
+img {
+  transition: opacity 0.4s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-grey-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey-medium);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-orange);
+}
