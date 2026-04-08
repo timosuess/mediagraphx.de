@@ -17,21 +17,9 @@
   --font-script: var(--font-caveat);
 }
 
-/* Lenis smooth scroll */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
+:root {
+  --peel-duration: 1.2s;
+  --peel-ease: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 body {
@@ -47,28 +35,10 @@ body {
   color: white;
 }
 
-/* Decorative curve SVG background */
-.bg-curves {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cpath d='M-100 400 C200 200 400 600 700 350 S1100 100 1500 400' fill='none' stroke='%23E8E8E8' stroke-width='1.5'/%3E%3Cpath d='M-100 500 C250 300 450 700 750 450 S1150 200 1500 500' fill='none' stroke='%23EFEFEF' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* Orange accent bar - like the CI */
+/* Orange accent bar */
 .orange-bar {
   height: 4px;
   background: linear-gradient(90deg, var(--color-orange) 0%, var(--color-orange-light) 100%);
-}
-
-/* Text reveal animation helper */
-.reveal-text {
-  clip-path: inset(0 0 100% 0);
-}
-
-.reveal-text.revealed {
-  clip-path: inset(0 0 0% 0);
-  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Smooth image loading */
@@ -99,7 +69,126 @@ img {
   writing-mode: vertical-lr;
 }
 
-/* fullPage.js navigation dots */
+/* ═══════════════════════════════════════
+   PAGE PEEL TRANSITION
+   ═══════════════════════════════════════ */
+
+.peel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  perspective: 1500px;
+  display: none;
+}
+
+.peel-page {
+  position: absolute;
+  inset: 0;
+  transform-origin: top right;
+  backface-visibility: hidden;
+  will-change: transform;
+  filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.35));
+}
+
+.peel-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #f0eeeb 0%, #d4d4d4 100%);
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  transform-origin: top right;
+}
+
+/* Peel hint - orange corner fold that pulses */
+.peel-hint {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .peel-hint {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.peel-hint.visible {
+  opacity: 1;
+}
+
+/* Peel animations */
+@keyframes peelDown {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: rotateX(-5deg) rotateY(-15deg) rotateZ(-3deg);
+    opacity: 1;
+  }
+  70% {
+    transform: rotateX(-15deg) rotateY(-80deg) rotateZ(-8deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: rotateX(-20deg) rotateY(-180deg) rotateZ(-10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes peelUp {
+  0% {
+    transform: rotateX(-20deg) rotateY(-180deg) rotateZ(-10deg);
+    opacity: 0;
+  }
+  30% {
+    transform: rotateX(-15deg) rotateY(-80deg) rotateZ(-8deg);
+    opacity: 0.9;
+  }
+  70% {
+    transform: rotateX(-5deg) rotateY(-15deg) rotateZ(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    opacity: 1;
+  }
+}
+
+.peel-page.peel-animate-down {
+  animation: peelDown var(--peel-duration) var(--peel-ease) forwards;
+}
+
+.peel-page.peel-animate-up {
+  animation: peelUp var(--peel-duration) var(--peel-ease) forwards;
+}
+
+/* Subtle pulse on the corner fold hint */
+@keyframes hintPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.peel-hint.visible {
+  animation: hintPulse 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════
+   FULLPAGE.JS OVERRIDES
+   ═══════════════════════════════════════ */
+
 #fp-nav ul li a span,
 .fp-slidesNav ul li a span {
   background: var(--color-grey-light) !important;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReactFullpage from "@fullpage/react-fullpage";
 import Image from "next/image";
 import {
@@ -16,14 +16,12 @@ import {
   Phone,
   Smartphone,
   Mail,
-  Globe as GlobeIcon,
   Clock,
   Send,
   CheckCircle,
   AlertCircle,
   ChevronDown,
 } from "lucide-react";
-import CornerFold from "@/components/CornerFold";
 import BriefbogenBg from "@/components/BriefbogenBg";
 
 /* ─── Navigation ─── */
@@ -60,16 +58,90 @@ const projects = [
 export default function FullPageSite() {
   const [activeSection, setActiveSection] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hintVisible, setHintVisible] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const peelPageRef = useRef<HTMLDivElement>(null);
+  const isAnimating = useRef(false);
 
-  const onLeave = useCallback(
-    (_origin: unknown, destination: { index: number }) => {
-      setActiveSection(destination.index);
+  // Show peel hint after initial load
+  useEffect(() => {
+    const timer = setTimeout(() => setHintVisible(true), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const runPeel = useCallback(
+    (originEl: HTMLElement, direction: string) => {
+      if (isAnimating.current || !overlayRef.current || !peelPageRef.current) return;
+      isAnimating.current = true;
+      setHintVisible(false);
+
+      // Clone the origin section into peel overlay
+      const clone = originEl.cloneNode(true) as HTMLElement;
+      clone.style.position = "absolute";
+      clone.style.inset = "0";
+      clone.style.width = "100vw";
+      clone.style.height = "100vh";
+      clone.style.margin = "0";
+      clone.style.zIndex = "1";
+
+      peelPageRef.current.innerHTML = "";
+      peelPageRef.current.appendChild(clone);
+      overlayRef.current.style.display = "block";
+
+      // Trigger animation
+      const animClass = direction === "down" ? "peel-animate-down" : "peel-animate-up";
+      peelPageRef.current.classList.remove("peel-animate-down", "peel-animate-up");
+      // Force reflow
+      void peelPageRef.current.offsetWidth;
+      peelPageRef.current.classList.add(animClass);
+
+      // Cleanup after animation
+      setTimeout(() => {
+        if (overlayRef.current) overlayRef.current.style.display = "none";
+        if (peelPageRef.current) {
+          peelPageRef.current.classList.remove(animClass);
+          peelPageRef.current.innerHTML = "";
+        }
+        isAnimating.current = false;
+        setTimeout(() => setHintVisible(true), 300);
+      }, 1250);
     },
     []
   );
 
+  const onLeave = useCallback(
+    (origin: { item: HTMLElement; index: number }, destination: { index: number }, direction: string) => {
+      if (isAnimating.current) return false;
+      setActiveSection(destination.index);
+      runPeel(origin.item, direction);
+      return true;
+    },
+    [runPeel]
+  );
+
   return (
     <>
+      {/* ─── Peel Hint (orange corner fold) ─── */}
+      <div className={`peel-hint ${hintVisible ? "visible" : ""}`}>
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="hintGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#F0A030" />
+              <stop offset="100%" stopColor="#E8941A" />
+            </linearGradient>
+            <filter id="hintShadow">
+              <feDropShadow dx="-2" dy="2" stdDeviation="3" floodOpacity="0.25" />
+            </filter>
+          </defs>
+          <path d="M80,0 L80,80 L0,0 Z" fill="url(#hintGrad)" filter="url(#hintShadow)" />
+        </svg>
+      </div>
+
+      {/* ─── Peel Overlay ─── */}
+      <div ref={overlayRef} className="peel-overlay">
+        <div ref={peelPageRef} className="peel-page" />
+      </div>
+
       {/* ─── Fixed Navigation ─── */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -117,7 +189,6 @@ export default function FullPageSite() {
           </button>
         </div>
 
-        {/* Mobile menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-500 bg-warm-white/95 backdrop-blur-md ${
             menuOpen ? "max-h-80 border-b border-orange/10" : "max-h-0"
@@ -138,7 +209,7 @@ export default function FullPageSite() {
         </div>
       </nav>
 
-      {/* ─── Vertical sidebar label (Briefbogen style) ─── */}
+      {/* ─── Vertical sidebar label ─── */}
       <div className="fixed left-6 bottom-8 z-40 hidden lg:flex flex-col items-center gap-3">
         <span className="text-xs text-grey-medium/60 tracking-[0.2em] font-medium writing-vertical-lr rotate-180 select-none">
           www.<span className="text-orange font-bold">mdgx</span>.de
@@ -150,13 +221,15 @@ export default function FullPageSite() {
       <ReactFullpage
         licenseKey=""
         credits={{ enabled: false }}
-        scrollingSpeed={900}
+        scrollingSpeed={0}
         anchors={navAnchors}
+        navigation
+        navigationPosition="right"
         navigationTooltips={navLabels}
         onLeave={onLeave}
         css3
-        easing="easeInOutCubic"
         fitToSection
+        autoScrolling
         keyboardScrolling
         scrollOverflow
         responsiveWidth={768}
@@ -166,7 +239,6 @@ export default function FullPageSite() {
             <div className="section">
               <div className="relative w-full h-full flex flex-col items-center justify-center px-6 bg-warm-white overflow-hidden">
                 <BriefbogenBg />
-                <CornerFold size="lg" />
 
                 <div className="relative z-10 flex flex-col items-center text-center max-w-4xl">
                   <div className="mb-8">
@@ -215,7 +287,6 @@ export default function FullPageSite() {
             <div className="section">
               <div className="relative w-full h-full flex items-center px-6 bg-warm-white overflow-hidden">
                 <BriefbogenBg />
-                <CornerFold size="md" />
 
                 <div className="max-w-7xl mx-auto w-full py-24 md:py-0">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20">
@@ -275,7 +346,6 @@ export default function FullPageSite() {
             <div className="section">
               <div className="relative w-full h-full flex items-center px-6 bg-white overflow-hidden">
                 <BriefbogenBg />
-                <CornerFold size="md" />
 
                 <div className="max-w-7xl mx-auto w-full py-24 md:py-0">
                   <div className="mb-6 md:mb-10">
@@ -315,7 +385,6 @@ export default function FullPageSite() {
             <div className="section">
               <div className="relative w-full h-full flex items-center px-6 bg-grey-subtle overflow-hidden">
                 <BriefbogenBg />
-                <CornerFold size="md" />
 
                 <div className="max-w-7xl mx-auto w-full py-24 md:py-0">
                   <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-6 md:mb-10 gap-3">
@@ -366,10 +435,8 @@ export default function FullPageSite() {
             {/* ═══ KONTAKT ═══ */}
             <div className="section fp-auto-height-responsive">
               <div className="relative w-full min-h-screen flex flex-col">
-                {/* Contact content */}
                 <div className="relative flex-1 flex items-center px-6 bg-warm-white overflow-hidden">
                   <BriefbogenBg />
-                  <CornerFold size="md" />
 
                   <div className="max-w-7xl mx-auto w-full py-24">
                     <div className="mb-12">
@@ -384,7 +451,6 @@ export default function FullPageSite() {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                      {/* Info */}
                       <div>
                         <h3 className="font-heading font-bold text-xl text-grey-dark mb-4">Timo Suess</h3>
                         <p className="text-grey-medium mb-6 leading-relaxed">
@@ -415,7 +481,6 @@ export default function FullPageSite() {
                         </div>
                       </div>
 
-                      {/* Form */}
                       <ContactForm />
                     </div>
                   </div>
@@ -423,7 +488,6 @@ export default function FullPageSite() {
                   <div className="absolute bottom-0 left-0 right-0 orange-bar" />
                 </div>
 
-                {/* Footer */}
                 <footer className="bg-grey-dark text-white">
                   <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -454,7 +518,7 @@ export default function FullPageSite() {
   );
 }
 
-/* ─── Contact Form (inline) ─── */
+/* ─── Contact Form ─── */
 import { useActionState } from "react";
 import { sendContactForm, type ContactFormState } from "@/app/actions/contact";
 
