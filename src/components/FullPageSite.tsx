@@ -158,6 +158,8 @@ export default function FullPageSite() {
         easing="easeInOutCubic"
         fitToSection
         keyboardScrolling
+        scrollOverflow
+        responsiveWidth={768}
         render={() => (
           <ReactFullpage.Wrapper>
             {/* ═══ HERO ═══ */}
@@ -215,46 +217,49 @@ export default function FullPageSite() {
                 <BriefbogenBg />
                 <CornerFold size="md" />
 
-                <div className="max-w-7xl mx-auto w-full">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                <div className="max-w-7xl mx-auto w-full py-24 md:py-0">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20">
                     <div className="lg:col-span-5">
-                      <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-4">
+                      <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-3">
                         Ueber uns
                       </p>
-                      <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-grey-dark leading-[1.1] mb-8">
-                        Ihr Partner
-                        <br />
-                        <span className="text-orange">fuer alles.</span>
+                      <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl font-bold text-grey-dark leading-[1.1] mb-5 md:mb-8">
+                        Ihr Partner <span className="text-orange">fuer alles.</span>
                       </h2>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-4">
+                      <p className="text-grey-medium text-base md:text-lg leading-relaxed mb-6 max-w-xl lg:hidden">
+                        MediaGraphX ist Ihre Werbeagentur im Westerwald. Von Print bis Digital,
+                        von der ersten Idee bis zum fertigen Produkt: Alles aus einer Hand.
+                      </p>
+
+                      <div className="grid grid-cols-4 lg:grid-cols-2 gap-2 md:gap-4">
                         {[
                           { value: "20+", label: "Jahre" },
                           { value: "2002", label: "Seit" },
                           { value: "Print", label: "& Digital" },
                           { value: "100%", label: "Persoenlich" },
                         ].map((s) => (
-                          <div key={s.label} className="text-center p-4 bg-white/60 rounded-sm border border-grey-light/20">
-                            <p className="font-heading font-extrabold text-2xl text-orange">{s.value}</p>
-                            <p className="text-grey-medium text-xs">{s.label}</p>
+                          <div key={s.label} className="text-center p-2 md:p-4 bg-white/60 rounded-sm border border-grey-light/20">
+                            <p className="font-heading font-extrabold text-lg md:text-2xl text-orange">{s.value}</p>
+                            <p className="text-grey-medium text-[10px] md:text-xs">{s.label}</p>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     <div className="lg:col-span-7 flex flex-col justify-center">
-                      <p className="text-grey-medium text-lg leading-relaxed mb-10 max-w-xl">
+                      <p className="text-grey-medium text-lg leading-relaxed mb-10 max-w-xl hidden lg:block">
                         MediaGraphX ist Ihre Werbeagentur im Westerwald. Von Print bis Digital,
                         von der ersten Idee bis zum fertigen Produkt: Alles aus einer Hand.
                       </p>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-3 gap-2 md:gap-4">
                         {pillars.map((p) => (
-                          <div key={p.title} className="group p-6 bg-white/70 rounded-sm border border-grey-light/30 hover:border-orange/30 transition-all duration-400">
-                            <h3 className="font-heading font-bold text-xl text-grey-dark mb-2 group-hover:text-orange transition-colors">
+                          <div key={p.title} className="group p-3 md:p-6 bg-white/70 rounded-sm border border-grey-light/30 hover:border-orange/30 transition-all duration-400">
+                            <h3 className="font-heading font-bold text-sm md:text-xl text-grey-dark mb-1 md:mb-2 group-hover:text-orange transition-colors">
                               {p.title}
                             </h3>
-                            <p className="text-grey-medium text-sm leading-relaxed">{p.text}</p>
+                            <p className="text-grey-medium text-[10px] md:text-sm leading-relaxed">{p.text}</p>
                           </div>
                         ))}
                       </div>
@@ -272,31 +277,29 @@ export default function FullPageSite() {
                 <BriefbogenBg />
                 <CornerFold size="md" />
 
-                <div className="max-w-7xl mx-auto w-full">
-                  <div className="mb-10">
-                    <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-4">
+                <div className="max-w-7xl mx-auto w-full py-24 md:py-0">
+                  <div className="mb-6 md:mb-10">
+                    <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-3">
                       Leistungen
                     </p>
-                    <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-grey-dark leading-[1.1]">
-                      Alles aus
-                      <br />
-                      <span className="text-orange">einer Hand.</span>
+                    <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl font-bold text-grey-dark leading-[1.1]">
+                      Alles aus <span className="text-orange">einer Hand.</span>
                     </h2>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     {services.map((s) => (
                       <div
                         key={s.title}
-                        className="group relative p-5 bg-warm-white/80 rounded-sm border border-grey-light/30 hover:border-orange/40 transition-all duration-400 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-glow/15 overflow-hidden"
+                        className="group relative p-3 md:p-5 bg-warm-white/80 rounded-sm border border-grey-light/30 hover:border-orange/40 transition-all duration-400 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-glow/15 overflow-hidden"
                       >
                         <div className="absolute top-0 left-0 w-0 h-[2px] bg-orange group-hover:w-full transition-all duration-500" />
-                        <s.icon className="w-6 h-6 text-grey-medium group-hover:text-orange transition-colors mb-3" strokeWidth={1.5} />
-                        <h3 className="font-heading font-bold text-sm md:text-base text-grey-dark mb-1">{s.title}</h3>
-                        <p className="text-grey-medium text-xs leading-relaxed mb-3">{s.desc}</p>
+                        <s.icon className="w-5 h-5 md:w-6 md:h-6 text-grey-medium group-hover:text-orange transition-colors mb-2 md:mb-3" strokeWidth={1.5} />
+                        <h3 className="font-heading font-bold text-xs md:text-base text-grey-dark mb-0.5 md:mb-1">{s.title}</h3>
+                        <p className="text-grey-medium text-[10px] md:text-xs leading-relaxed mb-2 md:mb-3 hidden md:block">{s.desc}</p>
                         <div className="flex flex-wrap gap-1">
                           {s.tags.map((t) => (
-                            <span key={t} className="text-[10px] font-medium text-orange/60 bg-orange/5 px-2 py-0.5 rounded-sm">{t}</span>
+                            <span key={t} className="text-[9px] md:text-[10px] font-medium text-orange/60 bg-orange/5 px-1.5 md:px-2 py-0.5 rounded-sm">{t}</span>
                           ))}
                         </div>
                       </div>
@@ -314,24 +317,22 @@ export default function FullPageSite() {
                 <BriefbogenBg />
                 <CornerFold size="md" />
 
-                <div className="max-w-7xl mx-auto w-full">
-                  <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
+                <div className="max-w-7xl mx-auto w-full py-24 md:py-0">
+                  <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-6 md:mb-10 gap-3">
                     <div>
-                      <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-4">
+                      <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-3">
                         Portfolio
                       </p>
-                      <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-grey-dark leading-[1.1]">
-                        Ausgewaehlte
-                        <br />
-                        <span className="text-orange">Arbeiten.</span>
+                      <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl font-bold text-grey-dark leading-[1.1]">
+                        Ausgewaehlte <span className="text-orange">Arbeiten.</span>
                       </h2>
                     </div>
-                    <p className="text-grey-medium text-base max-w-sm leading-relaxed">
+                    <p className="text-grey-medium text-sm md:text-base max-w-sm leading-relaxed">
                       Jedes Projekt mit Herzblut und Praezision umgesetzt.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
                     {projects.map((p, i) => (
                       <div
                         key={p.title}
@@ -339,7 +340,7 @@ export default function FullPageSite() {
                           i === 0 ? "md:col-span-2 md:row-span-2" : ""
                         }`}
                       >
-                        <div className={`relative ${i === 0 ? "aspect-[4/3]" : "aspect-[4/3]"}`}>
+                        <div className={`relative ${i === 0 ? "aspect-square md:aspect-[4/3]" : "aspect-square md:aspect-[4/3]"}`}>
                           <Image
                             src={p.image}
                             alt={p.title}
@@ -347,10 +348,10 @@ export default function FullPageSite() {
                             sizes="(max-width: 768px) 50vw, 33vw"
                             className="object-cover group-hover:scale-105 transition-transform duration-700"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                            <p className="text-orange text-[10px] md:text-xs font-heading font-semibold uppercase tracking-[0.2em] mb-1">{p.category}</p>
-                            <h3 className="font-heading font-bold text-sm md:text-lg text-white">{p.title}</h3>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
+                          <div className="absolute bottom-0 left-0 right-0 p-2 md:p-6 md:transform md:translate-y-4 md:group-hover:translate-y-0 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500">
+                            <p className="text-orange text-[8px] md:text-xs font-heading font-semibold uppercase tracking-[0.15em] mb-0.5">{p.category}</p>
+                            <h3 className="font-heading font-bold text-[11px] md:text-lg text-white">{p.title}</h3>
                           </div>
                         </div>
                       </div>
