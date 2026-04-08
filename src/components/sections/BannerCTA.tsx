@@ -8,7 +8,7 @@ export default function BannerCTA() {
           Sie suchen einen zuverlaessigen Werbepartner im Westerwald?
         </h3>
         <a href="#kontakt" onClick={(e) => { e.preventDefault(); document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" }); }}
-          className="shrink-0 px-8 py-3 bg-white text-orange font-heading font-bold text-sm uppercase tracking-widest hover:bg-grey-dark hover:text-white transition-all duration-300">
+          className="shrink-0 px-8 py-3 bg-dark text-orange font-heading font-bold text-sm uppercase tracking-widest hover:bg-dark-card transition-all duration-300">
           Jetzt anfragen
         </a>
       </div>

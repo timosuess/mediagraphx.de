@@ -24,29 +24,28 @@ export default function ContactSection() {
     return () => ctx.revert();
   }, []);
 
-  const formRef = useCallback((node: HTMLFormElement | null) => {
-    if (node && formState.success) node.reset();
-  }, []);
-
   const [formState, formAction, isPending] = useActionState(sendContactForm, initialState);
 
+  const formRef = useCallback((node: HTMLFormElement | null) => {
+    if (node && formState.success) node.reset();
+  }, [formState.success]);
+
   return (
-    <section ref={sectionRef} id="kontakt" className="py-20 md:py-28 px-6 bg-warm-white">
+    <section ref={sectionRef} id="kontakt" className="py-24 md:py-32 px-6 bg-dark">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4 contact-anim" style={{ fontFamily: "var(--font-marker), cursive" }}>
-            Kontakt aufnehmen
+        <div className="max-w-2xl mb-20 contact-anim">
+          <p className="text-orange font-heading font-semibold text-sm uppercase tracking-[0.3em] mb-4">Kontakt</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl text-text-primary uppercase tracking-wide mb-6"
+            style={{ fontFamily: "var(--font-marker), cursive" }}>
+            Sprechen wir.
           </h2>
-          <p className="text-grey-medium leading-relaxed italic contact-anim">
-            Sprechen Sie uns an - wir freuen uns auf Ihr Projekt.
-          </p>
+          <div className="h-px w-16 bg-orange" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Contact Info */}
           <div className="lg:col-span-4 contact-anim">
-            <h3 className="font-heading font-bold text-xl text-grey-dark mb-2">Timo Suess</h3>
-            <p className="text-grey-medium text-sm mb-8">Inhaber & Mediengestalter seit 2002</p>
+            <h3 className="font-heading font-bold text-xl text-text-primary mb-2">Timo Suess</h3>
+            <p className="text-text-muted text-sm mb-8">Inhaber & Mediengestalter seit 2002</p>
 
             <div className="space-y-5">
               {[
@@ -57,54 +56,53 @@ export default function ContactSection() {
               ].map((c) => (
                 <a key={c.label} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer" className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 bg-grey-subtle group-hover:bg-orange/10 flex items-center justify-center transition-colors">
+                  <div className="w-10 h-10 bg-dark-card border border-dark-border group-hover:border-orange/40 flex items-center justify-center transition-colors">
                     <c.Icon className="w-4 h-4 text-orange" />
                   </div>
                   <div>
-                    <p className="text-grey-dark text-sm font-medium group-hover:text-orange transition-colors">{c.label}</p>
-                    <p className="text-grey-medium text-xs">{c.sub}</p>
+                    <p className="text-text-primary text-sm font-medium group-hover:text-orange transition-colors">{c.label}</p>
+                    <p className="text-text-muted text-xs">{c.sub}</p>
                   </div>
                 </a>
               ))}
             </div>
 
-            <div className="mt-8 flex items-start gap-3 p-5 bg-grey-subtle">
+            <div className="mt-8 flex items-start gap-3 p-5 bg-dark-card border border-dark-border">
               <Clock className="w-4 h-4 text-orange shrink-0 mt-0.5" />
-              <div className="text-sm text-grey-medium">
-                <p className="font-medium text-grey-dark">Mo - Fr: 9:00 - 18:00 Uhr</p>
+              <div className="text-sm text-text-muted">
+                <p className="font-medium text-text-secondary">Mo - Fr: 9:00 - 18:00 Uhr</p>
                 <p>Termine nach Vereinbarung</p>
               </div>
             </div>
           </div>
 
-          {/* Form */}
           <div className="lg:col-span-8 contact-anim">
-            <div className="bg-white p-8 md:p-12 shadow-sm border border-grey-light/20">
-              <h3 className="font-heading font-bold text-xl text-grey-dark mb-2">Projekt anfragen</h3>
-              <p className="text-grey-medium text-sm mb-8">Erzaehlen Sie uns von Ihrem Vorhaben.</p>
+            <div className="bg-dark-card border border-dark-border p-8 md:p-12">
+              <h3 className="font-heading font-bold text-xl text-text-primary mb-2">Projekt anfragen</h3>
+              <p className="text-text-muted text-sm mb-8">Erzaehlen Sie uns von Ihrem Vorhaben.</p>
 
               {formState.success && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                  <p className="text-green-700 text-sm">Vielen Dank! Wir melden uns zeitnah.</p>
+                <div className="mb-6 p-4 bg-green-900/30 border border-green-800 flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                  <p className="text-green-300 text-sm">Vielen Dank! Wir melden uns zeitnah.</p>
                 </div>
               )}
               {formState.error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                  <p className="text-red-700 text-sm">{formState.error}</p>
+                <div className="mb-6 p-4 bg-red-900/30 border border-red-800 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                  <p className="text-red-300 text-sm">{formState.error}</p>
                 </div>
               )}
 
               <form ref={formRef} action={formAction} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <input type="text" name="name" required disabled={isPending} placeholder="Ihr Name *"
-                    className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm disabled:opacity-50" />
+                    className="w-full px-4 py-3.5 bg-dark-surface border border-dark-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange text-sm disabled:opacity-50 transition-colors" />
                   <input type="email" name="email" required disabled={isPending} placeholder="E-Mail *"
-                    className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm disabled:opacity-50" />
+                    className="w-full px-4 py-3.5 bg-dark-surface border border-dark-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange text-sm disabled:opacity-50 transition-colors" />
                 </div>
                 <select name="subject" disabled={isPending}
-                  className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm disabled:opacity-50">
+                  className="w-full px-4 py-3.5 bg-dark-surface border border-dark-border text-text-primary focus:outline-none focus:border-orange text-sm disabled:opacity-50 transition-colors">
                   <option value="">Betreff waehlen...</option>
                   <option value="webdesign">Webdesign</option>
                   <option value="corporate">Corporate Design</option>
@@ -115,7 +113,7 @@ export default function ContactSection() {
                   <option value="sonstiges">Sonstiges</option>
                 </select>
                 <textarea name="message" required disabled={isPending} rows={5} placeholder="Ihr Projekt..."
-                  className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm resize-none disabled:opacity-50" />
+                  className="w-full px-4 py-3.5 bg-dark-surface border border-dark-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange text-sm resize-none disabled:opacity-50 transition-colors" />
                 <button type="submit" disabled={isPending}
                   className="inline-flex items-center gap-2 px-10 py-4 bg-orange text-white font-heading font-bold text-sm uppercase tracking-widest hover:bg-orange-dark transition-all duration-300 disabled:opacity-50">
                   {isPending ? (
