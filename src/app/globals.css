@@ -1,27 +1,21 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #111111;
-  --color-foreground: #e5e5e5;
+  --color-background: #FEFCF9;
+  --color-foreground: #2A2A2A;
   --color-orange: #E8941A;
   --color-orange-light: #F0A030;
   --color-orange-dark: #C87A10;
   --color-orange-glow: #E8941A33;
-  --color-dark: #111111;
-  --color-dark-card: #1a1a1a;
-  --color-dark-border: #2a2a2a;
-  --color-dark-surface: #1e1e1e;
   --color-grey-dark: #3A3A3A;
   --color-grey-medium: #8C8C8C;
-  --color-grey-light: #555555;
-  --color-grey-subtle: #1a1a1a;
-  --color-warm-white: #111111;
-  --color-text-primary: #e5e5e5;
-  --color-text-secondary: #888888;
-  --color-text-muted: #555555;
+  --color-grey-light: #D4D4D4;
+  --color-grey-subtle: #F0EEEB;
+  --color-warm-white: #FEFCF9;
   --font-sans: var(--font-dm-sans);
   --font-heading: var(--font-syne);
   --font-script: var(--font-caveat);
+  --font-marker: var(--font-marker);
 }
 
 /* Lenis smooth scroll */
@@ -56,14 +50,8 @@ body {
 
 /* Orange accent bar */
 .orange-bar {
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, var(--color-orange) 0%, var(--color-orange-light) 100%);
-}
-
-/* Section divider line */
-.section-line {
-  height: 1px;
-  background: var(--color-dark-border);
 }
 
 /* Smooth image loading */
@@ -71,18 +59,18 @@ img {
   transition: opacity 0.4s ease;
 }
 
-/* Custom scrollbar - dark */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-dark);
+  background: var(--color-grey-subtle);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-grey-light);
-  border-radius: 2px;
+  background: var(--color-grey-medium);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -58,15 +58,16 @@ export default function VehicleWrap() {
     document.body.style.overflow = "hidden";
   };
 
-  const closeLightbox = useCallback(() => {
+  const closeLightbox = () => {
     setLightboxOpen(false);
     document.body.style.overflow = "";
-  }, []);
+  };
 
-  const navigate = useCallback((dir: number) => {
+  const navigate = (dir: number) => {
     setLightboxIdx((prev) => (prev + dir + allImages.length) % allImages.length);
-  }, []);
+  };
 
+  // Keyboard navigation
   useEffect(() => {
     if (!lightboxOpen) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -76,21 +77,20 @@ export default function VehicleWrap() {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [lightboxOpen, closeLightbox, navigate]);
+  }, [lightboxOpen]);
 
   let globalIndex = 0;
 
   return (
     <>
-      <section ref={ref} className="py-24 md:py-32 px-6 bg-dark">
+      <section ref={ref} className="py-20 md:py-28 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="vw-heading text-4xl md:text-5xl text-text-primary uppercase tracking-wide mb-6" style={{ fontFamily: "var(--font-marker), cursive" }}>
+            <h2 className="vw-heading text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
               Fahrzeugbeschriftung & Beklebung
             </h2>
-            <div className="h-px w-16 bg-orange mx-auto mb-6" />
-            <p className="vw-heading text-text-secondary leading-relaxed">
+            <p className="vw-heading text-grey-medium leading-relaxed italic">
               Ihr Fahrzeug ist Ihre mobile Visitenkarte. Wir gestalten und realisieren
               professionelle Fahrzeugbeschriftungen - vom einzelnen Schriftzug bis zur
               aufmerksamkeitsstarken Komplett-Beklebung. Durchdacht konzipiert, praezise
@@ -102,7 +102,7 @@ export default function VehicleWrap() {
           <div className="space-y-16">
             {projects.map((project) => (
               <div key={project.title}>
-                <h3 className="font-heading font-bold text-xl text-text-primary mb-6 flex items-center gap-3">
+                <h3 className="font-heading font-bold text-xl text-grey-dark mb-6 flex items-center gap-3">
                   <span className="w-8 h-[3px] bg-orange inline-block" />
                   {project.title}
                 </h3>
