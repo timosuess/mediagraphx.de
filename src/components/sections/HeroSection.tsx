@@ -3,87 +3,199 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+
+const NoiseGrainShader = dynamic(() => import("@/components/webgl/NoiseGrainShader"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
-  const ref = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Intro timeline
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(".hero-logo", { y: 40, opacity: 0, duration: 1, delay: 0.2 })
-        .from(".hero-title", { y: 80, opacity: 0, duration: 1.2, ease: "power4.out" }, "-=0.5")
-        .from(".hero-claim", { y: 30, opacity: 0, duration: 0.8 }, "-=0.6")
-        .from(".hero-cta", { y: 20, opacity: 0, duration: 0.6 }, "-=0.4");
+      // Wait for preloader to finish
+      const runIntro = () => {
+        const h1Target = document.querySelector<HTMLElement>(".hero-h1");
+        if (h1Target) {
+          const split = new SplitType(h1Target, { types: "lines,chars", tagName: "span" });
 
-      // Parallax: Background moves slower on scroll
-      gsap.to(".hero-bg", {
-        yPercent: 30,
+          const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+          tl.from(".hero-eyebrow", { y: 20, opacity: 0, duration: 0.8, delay: 0.15 })
+            .from(
+              split.chars,
+              {
+                yPercent: 120,
+                rotate: 4,
+                opacity: 0,
+                stagger: 0.018,
+                duration: 1.1,
+              },
+              "-=0.5"
+            )
+            .from(".hero-sub", { y: 24, opacity: 0, duration: 0.8 }, "-=0.6")
+            .from(".hero-cta > *", { y: 18, opacity: 0, duration: 0.6, stagger: 0.08 }, "-=0.5")
+            .from(".hero-scroll-hint", { opacity: 0, y: 10, duration: 0.8 }, "-=0.2");
+        }
+      };
+
+      if (document.documentElement.classList.contains("is-loading")) {
+        const obs = new MutationObserver(() => {
+          if (!document.documentElement.classList.contains("is-loading")) {
+            obs.disconnect();
+            runIntro();
+          }
+        });
+        obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+      } else {
+        runIntro();
+      }
+
+      // Parallax: Shader-Layer bewegt sich langsamer
+      gsap.to(".hero-bg-layer", {
+        yPercent: 15,
         ease: "none",
         scrollTrigger: {
-          trigger: ref.current,
+          trigger: sectionRef.current,
           start: "top top",
           end: "bottom top",
           scrub: true,
         },
       });
 
-      // Hero content fades + moves up as you scroll away
       gsap.to(".hero-content", {
-        yPercent: -15,
+        yPercent: -12,
         opacity: 0,
         ease: "none",
         scrollTrigger: {
-          trigger: ref.current,
+          trigger: sectionRef.current,
           start: "center center",
           end: "bottom top",
           scrub: true,
         },
       });
-    }, ref);
+    }, sectionRef);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={ref} id="start" className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="hero-bg absolute inset-0 bg-grey-dark">
-        <Image src="/images/portfolio-branding.png" alt="" fill className="object-cover opacity-20" priority />
-        <div className="absolute inset-0 bg-gradient-to-b from-grey-dark/80 via-grey-dark/60 to-grey-dark/90" />
+    <section
+      ref={sectionRef}
+      id="start"
+      className="relative min-h-screen w-full overflow-hidden bg-[#141210] text-[#f5ede1]"
+    >
+      {/* BG-Layer: Hero-Still (Fallback) + Video + Noise */}
+      <div className="hero-bg-layer absolute inset-0 will-change-transform">
+        <Image
+          src="/generated/hero-still.png"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+        <video
+          ref={videoRef}
+          data-hero
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/generated/hero-still.png"
+          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
+          onCanPlay={(e) => {
+            (e.currentTarget as HTMLVideoElement).classList.remove("opacity-0");
+          }}
+        >
+          <source src="/video/hero.webm" type="video/webm" />
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+        {/* Warm Overlay für Lesbarkeit */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#141210]/50 via-[#141210]/25 to-[#141210]/85" />
       </div>
 
-      <div className="absolute top-0 right-0 w-16 h-16 md:w-28 md:h-28 z-10 pointer-events-none">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-          <polygon points="0,0 100,0 100,100" fill="#E8941A" />
-        </svg>
-      </div>
+      {/* Noise-Grain als Film-Overlay */}
+      <NoiseGrainShader intensity={0.6} blendMode="overlay" />
 
-      <div className="hero-content relative z-10 text-center px-6 max-w-4xl">
-        <div className="hero-logo mb-6">
-          <Image src="/images/logo_mdgx.png" alt="MediaGraphX" width={400} height={250}
-            className="w-[200px] md:w-[300px] lg:w-[360px] h-auto mx-auto" />
+      {/* Content */}
+      <div className="hero-content relative z-10 min-h-screen flex flex-col justify-between px-6 md:px-12 pt-[140px] md:pt-[180px] pb-[80px]">
+        <div className="flex-1 flex flex-col justify-center max-w-[1440px] mx-auto w-full">
+          <div className="hero-eyebrow flex items-center gap-3 mb-8 text-xs uppercase tracking-[0.35em] text-[#f4c95d]">
+            <span className="w-10 h-px bg-[#f4c95d]" />
+            <span>Werbeagentur · Westerwald · seit 2002</span>
+          </div>
+
+          <h1
+            className="hero-h1 font-display italic font-light leading-[0.92] tracking-[-0.02em] text-[clamp(72px,13vw,240px)] text-[#f5ede1]"
+            style={{ fontFeatureSettings: "'ss01'" }}
+          >
+            Design, das knallt.
+          </h1>
+
+          <p className="hero-sub mt-10 max-w-xl text-lg md:text-xl text-[#f5ede1]/75 font-light">
+            Idee · Konzept · Design. Von Timo Suess und Team – für Marken, die auffallen dürfen, müssen, sollen.
+          </p>
+
+          <div className="hero-cta mt-12 flex flex-col sm:flex-row gap-4">
+            <a
+              href="#kontakt"
+              data-cursor="Jetzt anfragen"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector("#kontakt")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="magnetic group inline-flex items-center gap-3 bg-[#d86c3f] hover:bg-[#e8845a] text-[#141210] font-medium px-8 py-4 text-sm uppercase tracking-[0.15em] transition-colors"
+            >
+              Projekt starten
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a
+              href="#arbeiten"
+              data-cursor="Arbeiten ansehen"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector("#arbeiten")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="magnetic inline-flex items-center gap-3 border border-[#f5ede1]/40 hover:border-[#f5ede1] text-[#f5ede1] px-8 py-4 text-sm uppercase tracking-[0.15em] transition-colors link-underline"
+            >
+              Arbeiten ansehen
+            </a>
+          </div>
         </div>
-        <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl text-white leading-[1] tracking-tight mb-6" style={{ fontFamily: "var(--font-marker), cursive" }}>
-          #kreatiefsinn
-        </h1>
-        <p className="hero-claim text-white/70 text-lg md:text-2xl font-light max-w-2xl mx-auto mb-10">
-          Idee. Konzept. Design. — Ihre Full-Service Werbeagentur im Westerwald seit 2002.
-        </p>
-        <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="#leistungen" onClick={(e) => { e.preventDefault(); document.querySelector("#leistungen")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="px-10 py-4 bg-orange text-white font-heading font-bold text-sm uppercase tracking-widest hover:bg-orange-dark transition-all duration-300">
-            Leistungen entdecken
-          </a>
-          <a href="#arbeiten" onClick={(e) => { e.preventDefault(); document.querySelector("#arbeiten")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="px-10 py-4 border-2 border-white/30 text-white font-heading font-bold text-sm uppercase tracking-widest hover:border-orange hover:text-orange transition-all duration-300">
-            Unsere Arbeiten
-          </a>
+
+        {/* Bottom-Bar: Hashtag links, Scroll-Hint rechts */}
+        <div className="relative flex items-end justify-between mt-10">
+          <div className="font-script text-2xl md:text-4xl text-[#f4c95d] italic rotate-[-6deg]">
+            #kreatiefsinn
+          </div>
+          <div className="hero-scroll-hint hidden md:flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[#f5ede1]/60">
+            <span>Scroll</span>
+            <span className="block w-12 h-px bg-[#f5ede1]/60 relative overflow-hidden">
+              <span className="absolute inset-0 bg-[#d86c3f] animate-[slide_2.5s_ease-in-out_infinite]" />
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 orange-bar" />
+      <style jsx>{`
+        @keyframes slide {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </section>
   );
 }

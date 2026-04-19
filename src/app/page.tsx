@@ -1,14 +1,10 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/sections/HeroSection";
-import BannerCTA from "@/components/sections/BannerCTA";
-import ServicesCards from "@/components/sections/ServicesCards";
-import FeaturedProject from "@/components/sections/FeaturedProject";
-import WhyChooseUs from "@/components/sections/WhyChooseUs";
-import WorkWithUs from "@/components/sections/WorkWithUs";
-import StatsCounter from "@/components/sections/StatsCounter";
-import PortfolioGrid from "@/components/sections/PortfolioGrid";
-import Testimonials from "@/components/sections/Testimonials";
+import AboutTimo from "@/components/sections/AboutTimo";
+import ServicesGrid from "@/components/sections/ServicesGrid";
+import ShowcaseGrid from "@/components/sections/ShowcaseGrid";
+import ProcessPin from "@/components/sections/ProcessPin";
 import ContactSection from "@/components/sections/ContactSection";
 import SiteFooter from "@/components/sections/SiteFooter";
 
@@ -18,14 +14,10 @@ export default function Home() {
       <Navigation />
       <main>
         <HeroSection />
-        <BannerCTA />
-        <ServicesCards />
-        <FeaturedProject />
-        <WhyChooseUs />
-        <WorkWithUs />
-        <StatsCounter />
-        <PortfolioGrid />
-        <Testimonials />
+        <AboutTimo />
+        <ServicesGrid />
+        <ShowcaseGrid />
+        <ProcessPin />
         <ContactSection />
       </main>
       <SiteFooter />

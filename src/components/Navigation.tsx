@@ -1,32 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X, Clock, Mail as MailIcon, ChevronDown } from "lucide-react";
-import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
 const navLinks = [
-  { href: "#start", label: "Start", anchor: true },
-  { href: "#agentur", label: "Agentur", anchor: true },
-  {
-    href: "#leistungen",
-    label: "Leistungen",
-    anchor: true,
-    children: [
-      { href: "/fahrzeugbeschriftung", label: "Fahrzeugbeschriftung" },
-    ],
-  },
-  { href: "#arbeiten", label: "Arbeiten", anchor: true },
-  { href: "#kontakt", label: "Kontakt", anchor: true },
+  { href: "#agentur", label: "Agentur" },
+  { href: "#leistungen", label: "Leistungen" },
+  { href: "#arbeiten", label: "Arbeiten" },
+  { href: "#prozess", label: "Prozess" },
+  { href: "#kontakt", label: "Kontakt" },
 ];
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [invert, setInvert] = useState(true); // true = auf dunklem Hero, helle Schrift
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60);
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      // Invert switch – Hero + ProcessPin sind dunkel, Rest hell
+      // Einfache Heuristik: nach 80vh dunkel → cream, also invert=false (dunkle Schrift)
+      setInvert(y < window.innerHeight * 0.85);
+    };
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -34,117 +33,90 @@ export default function Navigation() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileOpen(false);
-    setDropdownOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const linkClass = "text-sm font-heading font-semibold text-grey-dark hover:text-orange transition-colors duration-300 uppercase tracking-wider";
+  const textColor = invert ? "text-[#f5ede1]" : "text-[#141210]";
+  const bgClass = scrolled
+    ? invert
+      ? "bg-[#141210]/70 backdrop-blur-md"
+      : "bg-[#f5ede1]/80 backdrop-blur-md"
+    : "bg-transparent";
 
   return (
-    <>
-      {/* Top Info Bar */}
-      <div className="bg-grey-dark text-white/70 text-xs font-medium hidden md:block">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-10">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3 h-3 text-orange" />
-              Mo - Fr: 9:00 - 18:00 Uhr
-            </span>
-            <span className="flex items-center gap-1.5">
-              <MailIcon className="w-3 h-3 text-orange" />
-              timo.suess@mdgx.de
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span>Tel: 02681.9825-15</span>
-          </div>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-[80] transition-all duration-500 ${bgClass}`}
+    >
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-[72px] md:h-[88px]">
+        {/* Brand */}
+        <a
+          href="#start"
+          data-cursor="Nach oben"
+          onClick={(e) => handleNavClick(e, "#start")}
+          className={`font-display italic text-2xl md:text-3xl font-light tracking-tight ${textColor} transition-colors`}
+        >
+          mediagraphx<span className="text-[#d86c3f]">.</span>
+        </a>
+
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-10">
+          {navLinks.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              data-cursor={l.label}
+              onClick={(e) => handleNavClick(e, l.href)}
+              className={`text-xs uppercase tracking-[0.3em] ${textColor} opacity-80 hover:opacity-100 hover:text-[#d86c3f] transition-all link-underline`}
+            >
+              {l.label}
+            </a>
+          ))}
+          <a
+            href="#kontakt"
+            data-cursor="Projekt starten"
+            onClick={(e) => handleNavClick(e, "#kontakt")}
+            className="magnetic inline-flex items-center gap-2 bg-[#d86c3f] hover:bg-[#b8562e] text-[#141210] text-xs uppercase tracking-[0.2em] px-5 py-2.5 transition-colors"
+          >
+            Anfragen
+          </a>
         </div>
+
+        {/* Mobile toggle */}
+        <button
+          className={`md:hidden ${textColor}`}
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Menü"
+        >
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </div>
 
-      {/* Main Nav */}
-      <nav className={`sticky top-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-warm-white/95 backdrop-blur-md shadow-md" : "bg-warm-white"
-      }`}>
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20 md:h-24">
-          <a href="#start" onClick={(e) => handleNavClick(e, "#start")} className="group">
-            <Image src="/images/logo_mdgx_nav.png" alt="MediaGraphX" width={180} height={80} priority
-              className="h-12 md:h-14 w-auto group-hover:opacity-80 transition-opacity" />
-          </a>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) =>
-              link.children ? (
-                /* Dropdown */
-                <div key={link.href} className="relative group"
-                  onMouseEnter={() => setDropdownOpen(true)}
-                  onMouseLeave={() => setDropdownOpen(false)}>
-                  <a href={link.href} onClick={(e) => handleNavClick(e, link.href)}
-                    className={`${linkClass} flex items-center gap-1`}>
-                    {link.label}
-                    <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
-                  </a>
-
-                  <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-300 ${
-                    dropdownOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
-                  }`}>
-                    <div className="bg-white shadow-lg border border-grey-light/20 min-w-[220px]">
-                      {/* Link to anchor first */}
-                      <a href={link.href} onClick={(e) => { handleNavClick(e, link.href); setDropdownOpen(false); }}
-                        className="block px-5 py-3 text-sm font-heading font-semibold text-grey-dark hover:text-orange hover:bg-grey-subtle/50 transition-colors uppercase tracking-wider border-b border-grey-light/20">
-                        Alle Leistungen
-                      </a>
-                      {link.children.map((child) => (
-                        <Link key={child.href} href={child.href}
-                          onClick={() => setDropdownOpen(false)}
-                          className="block px-5 py-3 text-sm font-heading font-semibold text-grey-dark hover:text-orange hover:bg-grey-subtle/50 transition-colors uppercase tracking-wider">
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)}
-                  className={linkClass}>
-                  {link.label}
-                </a>
-              )
-            )}
-          </div>
-
-          <button className="md:hidden text-grey-dark hover:text-orange transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-500 ${
+          invert ? "bg-[#141210]/95" : "bg-[#f5ede1]/95"
+        } backdrop-blur-md ${mobileOpen ? "max-h-[440px]" : "max-h-0"}`}
+      >
+        <div className="px-6 py-8 flex flex-col gap-6">
+          {navLinks.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={(e) => handleNavClick(e, l.href)}
+              className={`font-display italic text-3xl font-light ${textColor} hover:text-[#d86c3f] transition-colors`}
+            >
+              {l.label}
+            </a>
+          ))}
+          <Link
+            href="/fahrzeugbeschriftung"
+            onClick={() => setMobileOpen(false)}
+            className={`font-display italic text-lg font-light ${textColor} opacity-60`}
+          >
+            Fahrzeugbeschriftung →
+          </Link>
         </div>
-
-        {/* Mobile Menu */}
-        <div className={`md:hidden overflow-hidden transition-all duration-500 bg-warm-white ${
-          mobileOpen ? "max-h-[400px] border-t border-grey-light/30" : "max-h-0"
-        }`}>
-          <div className="px-6 py-6 flex flex-col gap-5">
-            {navLinks.map((link) => (
-              <div key={link.href}>
-                <a href={link.href} onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-lg font-heading font-semibold text-grey-dark hover:text-orange transition-colors uppercase">
-                  {link.label}
-                </a>
-                {link.children && (
-                  <div className="ml-4 mt-3 flex flex-col gap-3 border-l-2 border-orange/30 pl-4">
-                    {link.children.map((child) => (
-                      <Link key={child.href} href={child.href} onClick={() => setMobileOpen(false)}
-                        className="text-base font-heading font-medium text-grey-medium hover:text-orange transition-colors uppercase">
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 }

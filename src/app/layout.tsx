@@ -1,50 +1,49 @@
 import type { Metadata } from "next";
-import { DM_Sans, Syne, Caveat, Permanent_Marker } from "next/font/google";
+import { Fraunces, Manrope, Caveat } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import Preloader from "@/components/Preloader";
+import CustomCursor from "@/components/CustomCursor";
+import MagneticAttractor from "@/components/MagneticAttractor";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const fraunces = Fraunces({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  axes: ["opsz", "SOFT", "WONK"],
 });
 
-const syne = Syne({
-  variable: "--font-syne",
+const manrope = Manrope({
+  variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const caveat = Caveat({
-  variable: "--font-caveat",
+  variable: "--font-script",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const permanentMarker = Permanent_Marker({
-  variable: "--font-marker",
-  subsets: ["latin"],
-  weight: "400",
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mdgx.de"),
-  title: "MediaGraphX | Idee. Konzept. Design. | Werbeagentur Altenkirchen",
+  title: "MediaGraphX | Design, das knallt. | Werbeagentur Westerwald",
   description:
-    "MediaGraphX - Ihre Full-Service Werbeagentur in Altenkirchen. Webdesign, Logoentwicklung, Corporate Design, Printwerbung und mehr. Inhaber Timo Suess.",
+    "MediaGraphX – Werbeagentur im Westerwald. Corporate Design, Webdesign, Logoentwicklung, Fahrzeugbeschriftung, Print. Inhaber Timo Suess, seit 2002.",
   keywords: [
     "Werbeagentur",
+    "Westerwald",
     "Altenkirchen",
     "Webdesign",
     "Corporate Design",
     "Logoentwicklung",
     "MediaGraphX",
     "Timo Suess",
-    "Full-Service-Agentur",
+    "Fahrzeugbeschriftung",
   ],
   openGraph: {
-    title: "MediaGraphX | Idee. Konzept. Design.",
-    description: "Full-Service Werbeagentur in Altenkirchen - Webdesign, Print, Corporate Design",
+    title: "MediaGraphX | Design, das knallt.",
+    description: "Werbeagentur im Westerwald – Corporate Design, Webdesign, Fahrzeugbeschriftung, Print.",
     url: "https://www.mdgx.de",
     siteName: "MediaGraphX",
     locale: "de_DE",
@@ -60,9 +59,12 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${dmSans.variable} ${syne.variable} ${caveat.variable} ${permanentMarker.variable} antialiased`}
+      className={`${fraunces.variable} ${manrope.variable} ${caveat.variable} antialiased`}
     >
       <body>
+        <Preloader />
+        <CustomCursor />
+        <MagneticAttractor />
         {children}
         <WhatsAppButton />
       </body>

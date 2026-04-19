@@ -1,132 +1,158 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useActionState } from "react";
-import { MapPin, Phone, Smartphone, Mail, Clock, Send, CheckCircle, AlertCircle } from "lucide-react";
-import { sendContactForm, type ContactFormState } from "@/app/actions/contact";
+import SplitType from "split-type";
+import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const initialState: ContactFormState = { success: false, error: null };
-
 export default function ContactSection() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".contact-anim", {
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-        y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power3.out",
+      const h2 = ref.current?.querySelector<HTMLElement>(".contact-h2");
+      if (h2) {
+        const split = new SplitType(h2, { types: "lines,chars", tagName: "span" });
+        gsap.from(split.chars, {
+          yPercent: 120,
+          rotate: 3,
+          opacity: 0,
+          stagger: 0.015,
+          duration: 1,
+          ease: "power4.out",
+          scrollTrigger: { trigger: h2, start: "top 85%" },
+        });
+      }
+
+      const mail = ref.current?.querySelector<HTMLElement>(".contact-mail");
+      if (mail) {
+        const split = new SplitType(mail, { types: "chars", tagName: "span" });
+        gsap.from(split.chars, {
+          y: 30,
+          opacity: 0,
+          stagger: 0.012,
+          duration: 0.7,
+          ease: "power4.out",
+          scrollTrigger: { trigger: mail, start: "top 85%" },
+        });
+      }
+
+      gsap.from(".contact-card", {
+        y: 24,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".contact-cards", start: "top 85%" },
       });
-    }, sectionRef);
+
+      gsap.from(".contact-cta", {
+        y: 20,
+        opacity: 0,
+        stagger: 0.08,
+        duration: 0.6,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".contact-cta-row", start: "top 90%" },
+      });
+    }, ref);
     return () => ctx.revert();
   }, []);
 
-  const formRef = useCallback((node: HTMLFormElement | null) => {
-    if (node && formState.success) node.reset();
-  }, []);
-
-  const [formState, formAction, isPending] = useActionState(sendContactForm, initialState);
-
   return (
-    <section ref={sectionRef} id="kontakt" className="py-20 md:py-28 px-6 bg-warm-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4 contact-anim" style={{ fontFamily: "var(--font-marker), cursive" }}>
-            Kontakt aufnehmen
-          </h2>
-          <p className="text-grey-medium leading-relaxed italic contact-anim">
-            Sprechen Sie uns an - wir freuen uns auf Ihr Projekt.
-          </p>
+    <section
+      ref={ref}
+      id="kontakt"
+      className="relative bg-[#f5ede1] text-[#141210] py-[clamp(100px,14vw,200px)] overflow-hidden"
+    >
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        {/* Eyebrow */}
+        <div className="flex items-center gap-3 mb-8 text-xs uppercase tracking-[0.35em] text-[#d86c3f]">
+          <span className="w-10 h-px bg-[#d86c3f]" />
+          <span>Kontakt</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Contact Info */}
-          <div className="lg:col-span-4 contact-anim">
-            <h3 className="font-heading font-bold text-xl text-grey-dark mb-2">Timo Suess</h3>
-            <p className="text-grey-medium text-sm mb-8">Inhaber & Mediengestalter seit 2002</p>
+        {/* Mega-Headline */}
+        <h2 className="contact-h2 font-display font-light italic leading-[0.9] tracking-[-0.02em] text-[clamp(52px,8vw,140px)] max-w-5xl">
+          Reden wir <br />
+          <span className="text-[#d86c3f]">über dein Projekt.</span>
+        </h2>
 
-            <div className="space-y-5">
-              {[
-                { Icon: MapPin, label: "Sehrtenbachstrasse 20", sub: "57610 Altenkirchen", href: "https://maps.google.com/?q=Sehrtenbachstrasse+20+57610+Altenkirchen" },
-                { Icon: Phone, label: "02681.9825-15", sub: "Telefon", href: "tel:+4926819825015" },
-                { Icon: Smartphone, label: "0170.5417934", sub: "Mobil", href: "tel:+491705417934" },
-                { Icon: Mail, label: "timo.suess@mdgx.de", sub: "E-Mail", href: "mailto:timo.suess@mdgx.de" },
-              ].map((c) => (
-                <a key={c.label} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined}
-                  rel="noopener noreferrer" className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 bg-grey-subtle group-hover:bg-orange/10 flex items-center justify-center transition-colors">
-                    <c.Icon className="w-4 h-4 text-orange" />
-                  </div>
-                  <div>
-                    <p className="text-grey-dark text-sm font-medium group-hover:text-orange transition-colors">{c.label}</p>
-                    <p className="text-grey-medium text-xs">{c.sub}</p>
-                  </div>
-                </a>
-              ))}
-            </div>
+        {/* Email zentral – groß, aber unterhalb der H2, nicht rechts daneben */}
+        <div className="mt-20 md:mt-28 border-t border-[#141210]/10 pt-12">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#6a625a] mb-6">
+            Schreib uns direkt
+          </p>
+          <a
+            href="mailto:timo.suess@mdgx.de"
+            data-cursor="E-Mail schreiben"
+            className="contact-mail group inline-flex flex-wrap items-center gap-x-4 gap-y-2 font-display italic font-light text-[clamp(36px,6vw,96px)] leading-[0.95] text-[#141210] hover:text-[#d86c3f] transition-colors duration-500 max-w-full break-all"
+          >
+            <span className="break-all">timo.suess@mdgx.de</span>
+            <ArrowUpRight className="w-[0.6em] h-[0.6em] shrink-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" />
+          </a>
+        </div>
 
-            <div className="mt-8 flex items-start gap-3 p-5 bg-grey-subtle">
-              <Clock className="w-4 h-4 text-orange shrink-0 mt-0.5" />
-              <div className="text-sm text-grey-medium">
-                <p className="font-medium text-grey-dark">Mo - Fr: 9:00 - 18:00 Uhr</p>
-                <p>Termine nach Vereinbarung</p>
-              </div>
+        {/* Info-Cards: Phone | Allgemein | Studio */}
+        <div className="contact-cards mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-3 gap-px bg-[#141210]/10">
+          <div className="contact-card bg-[#f5ede1] p-8 md:p-10">
+            <div className="text-xs uppercase tracking-[0.3em] text-[#6a625a] mb-4 flex items-center gap-2">
+              <Phone className="w-3.5 h-3.5 text-[#d86c3f]" /> Telefon
             </div>
+            <a
+              href="tel:+492681982515"
+              data-cursor="Anrufen"
+              className="font-display italic font-light text-2xl md:text-3xl leading-tight hover:text-[#d86c3f] transition-colors"
+            >
+              02681<br />9825-15
+            </a>
           </div>
-
-          {/* Form */}
-          <div className="lg:col-span-8 contact-anim">
-            <div className="bg-white p-8 md:p-12 shadow-sm border border-grey-light/20">
-              <h3 className="font-heading font-bold text-xl text-grey-dark mb-2">Projekt anfragen</h3>
-              <p className="text-grey-medium text-sm mb-8">Erzaehlen Sie uns von Ihrem Vorhaben.</p>
-
-              {formState.success && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                  <p className="text-green-700 text-sm">Vielen Dank! Wir melden uns zeitnah.</p>
-                </div>
-              )}
-              {formState.error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                  <p className="text-red-700 text-sm">{formState.error}</p>
-                </div>
-              )}
-
-              <form ref={formRef} action={formAction} className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <input type="text" name="name" required disabled={isPending} placeholder="Ihr Name *"
-                    className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm disabled:opacity-50" />
-                  <input type="email" name="email" required disabled={isPending} placeholder="E-Mail *"
-                    className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm disabled:opacity-50" />
-                </div>
-                <select name="subject" disabled={isPending}
-                  className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm disabled:opacity-50">
-                  <option value="">Betreff waehlen...</option>
-                  <option value="webdesign">Webdesign</option>
-                  <option value="corporate">Corporate Design</option>
-                  <option value="logo">Logoentwicklung</option>
-                  <option value="print">Printwerbung</option>
-                  <option value="seo">SEO / Online Marketing</option>
-                  <option value="foto">Fotografie</option>
-                  <option value="sonstiges">Sonstiges</option>
-                </select>
-                <textarea name="message" required disabled={isPending} rows={5} placeholder="Ihr Projekt..."
-                  className="w-full px-4 py-3.5 bg-grey-subtle border-0 text-grey-dark placeholder:text-grey-medium/50 focus:outline-none focus:ring-2 focus:ring-orange/20 text-sm resize-none disabled:opacity-50" />
-                <button type="submit" disabled={isPending}
-                  className="inline-flex items-center gap-2 px-10 py-4 bg-orange text-white font-heading font-bold text-sm uppercase tracking-widest hover:bg-orange-dark transition-all duration-300 disabled:opacity-50">
-                  {isPending ? (
-                    <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Senden...</>
-                  ) : (
-                    <><Send className="w-4 h-4" /> Nachricht senden</>
-                  )}
-                </button>
-              </form>
+          <div className="contact-card bg-[#f5ede1] p-8 md:p-10">
+            <div className="text-xs uppercase tracking-[0.3em] text-[#6a625a] mb-4 flex items-center gap-2">
+              <Mail className="w-3.5 h-3.5 text-[#d86c3f]" /> Allgemein
             </div>
+            <a
+              href="mailto:info@mdgx.de"
+              data-cursor="E-Mail"
+              className="font-display italic font-light text-2xl md:text-3xl leading-tight hover:text-[#d86c3f] transition-colors break-all"
+            >
+              info@<br />mdgx.de
+            </a>
           </div>
+          <div className="contact-card bg-[#f5ede1] p-8 md:p-10">
+            <div className="text-xs uppercase tracking-[0.3em] text-[#6a625a] mb-4 flex items-center gap-2">
+              <MapPin className="w-3.5 h-3.5 text-[#d86c3f]" /> Studio
+            </div>
+            <p className="font-display italic font-light text-2xl md:text-3xl leading-tight">
+              Altenkirchen<br />Westerwald
+            </p>
+          </div>
+        </div>
+
+        {/* CTA-Row */}
+        <div className="contact-cta-row mt-12 md:mt-16 flex flex-wrap items-center gap-4">
+          <a
+            href="mailto:timo.suess@mdgx.de"
+            data-cursor="Projekt starten"
+            className="contact-cta magnetic inline-flex items-center gap-3 bg-[#141210] hover:bg-[#d86c3f] text-[#f5ede1] px-8 py-4 text-sm uppercase tracking-[0.15em] transition-colors"
+          >
+            Projekt starten
+            <ArrowUpRight className="w-4 h-4" />
+          </a>
+          <a
+            href="https://wa.me/491705417934"
+            target="_blank"
+            rel="noopener"
+            data-cursor="WhatsApp"
+            className="contact-cta magnetic inline-flex items-center gap-3 border border-[#141210]/30 hover:border-[#141210] text-[#141210] px-8 py-4 text-sm uppercase tracking-[0.15em] link-underline"
+          >
+            WhatsApp
+          </a>
+          <span className="contact-cta ml-auto text-xs uppercase tracking-[0.3em] text-[#6a625a] hidden md:inline">
+            Antwortzeit · meist unter 24&thinsp;h
+          </span>
         </div>
       </div>
     </section>

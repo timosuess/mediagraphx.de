@@ -10,23 +10,23 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
-    title: "Schumann Moebelwerkstaette / Kiehl's",
+    title: "Schumann Möbelwerkstätte / Kiehl's",
     images: [
       { src: "/images/fahrzeug/IMG_0668.jpg", alt: "Schumann Sprinter - Heckansicht" },
       { src: "/images/fahrzeug/IMG_0673.jpg", alt: "Schumann Sprinter - Seitenansicht" },
     ],
   },
   {
-    title: "Dajanas Pferdedecken-Waescherei",
+    title: "Dajanas Pferdedecken-Wäscherei",
     images: [
-      { src: "/images/fahrzeug/IMG_0648.jpg", alt: "Pferdedecken-Waescherei - Folie auf Arbeitstisch" },
-      { src: "/images/fahrzeug/IMG_0649.jpg", alt: "Pferdedecken-Waescherei - Beklebung Seitenwand" },
-      { src: "/images/fahrzeug/IMG_0656.jpg", alt: "Pferdedecken-Waescherei - Heckansicht" },
-      { src: "/images/fahrzeug/IMG_0658.jpg", alt: "Pferdedecken-Waescherei - fertig von hinten" },
-      { src: "/images/fahrzeug/IMG_0660.jpg", alt: "Pferdedecken-Waescherei - Logo Detail" },
-      { src: "/images/fahrzeug/IMG_0661.jpg", alt: "Pferdedecken-Waescherei - Farbauswahl Folie" },
-      { src: "/images/fahrzeug/IMG_0663.jpg", alt: "Pferdedecken-Waescherei - fertig Seitenansicht rechts" },
-      { src: "/images/fahrzeug/IMG_0671.jpg", alt: "Pferdedecken-Waescherei - fertig von vorne" },
+      { src: "/images/fahrzeug/IMG_0648.jpg", alt: "Pferdedecken-Wäscherei - Folie auf Arbeitstisch" },
+      { src: "/images/fahrzeug/IMG_0649.jpg", alt: "Pferdedecken-Wäscherei - Beklebung Seitenwand" },
+      { src: "/images/fahrzeug/IMG_0656.jpg", alt: "Pferdedecken-Wäscherei - Heckansicht" },
+      { src: "/images/fahrzeug/IMG_0658.jpg", alt: "Pferdedecken-Wäscherei - fertig von hinten" },
+      { src: "/images/fahrzeug/IMG_0660.jpg", alt: "Pferdedecken-Wäscherei - Logo Detail" },
+      { src: "/images/fahrzeug/IMG_0661.jpg", alt: "Pferdedecken-Wäscherei - Farbauswahl Folie" },
+      { src: "/images/fahrzeug/IMG_0663.jpg", alt: "Pferdedecken-Wäscherei - fertig Seitenansicht rechts" },
+      { src: "/images/fahrzeug/IMG_0671.jpg", alt: "Pferdedecken-Wäscherei - fertig von vorne" },
     ],
   },
 ];
@@ -67,7 +67,6 @@ export default function VehicleWrap() {
     setLightboxIdx((prev) => (prev + dir + allImages.length) % allImages.length);
   };
 
-  // Keyboard navigation
   useEffect(() => {
     if (!lightboxOpen) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -83,27 +82,28 @@ export default function VehicleWrap() {
 
   return (
     <>
-      <section ref={ref} className="py-20 md:py-28 px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="vw-heading text-3xl md:text-4xl text-grey-dark uppercase tracking-wide mb-4" style={{ fontFamily: "var(--font-marker), cursive" }}>
-              Fahrzeugbeschriftung & Beklebung
+      <section ref={ref} className="py-24 md:py-32 px-6 md:px-12 bg-[#f5ede1] text-[#141210]">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="max-w-3xl mb-20">
+            <div className="flex items-center gap-3 mb-6 text-xs uppercase tracking-[0.35em] text-[#d86c3f]">
+              <span className="w-10 h-px bg-[#d86c3f]" />
+              <span>Galerie</span>
+            </div>
+            <h2 className="vw-heading font-display italic font-light leading-[0.95] tracking-[-0.02em] text-[clamp(44px,6vw,96px)]">
+              Fahrzeuge, die <span className="text-[#d86c3f]">gesehen werden.</span>
             </h2>
-            <p className="vw-heading text-grey-medium leading-relaxed italic">
+            <p className="vw-heading mt-8 text-lg leading-relaxed text-[#2b2621]">
               Ihr Fahrzeug ist Ihre mobile Visitenkarte. Wir gestalten und realisieren
-              professionelle Fahrzeugbeschriftungen - vom einzelnen Schriftzug bis zur
-              aufmerksamkeitsstarken Komplett-Beklebung. Durchdacht konzipiert, praezise
-              umgesetzt und garantiert ein Hingucker auf jeder Strasse.
+              professionelle Fahrzeugbeschriftungen – vom einzelnen Schriftzug bis zur
+              aufmerksamkeitsstarken Komplett-Beklebung.
             </p>
           </div>
 
-          {/* Projects */}
-          <div className="space-y-16">
+          <div className="space-y-20">
             {projects.map((project) => (
               <div key={project.title}>
-                <h3 className="font-heading font-bold text-xl text-grey-dark mb-6 flex items-center gap-3">
-                  <span className="w-8 h-[3px] bg-orange inline-block" />
+                <h3 className="font-display italic font-light text-2xl md:text-3xl mb-6 flex items-center gap-3">
+                  <span className="w-10 h-px bg-[#d86c3f] inline-block" />
                   {project.title}
                 </h3>
 
@@ -114,17 +114,18 @@ export default function VehicleWrap() {
                       <button
                         key={img.src}
                         onClick={() => openLightbox(idx)}
-                        className="vw-img group relative aspect-[4/3] overflow-hidden cursor-pointer"
+                        data-cursor="Vergrößern"
+                        className="vw-img group relative aspect-[4/3] overflow-hidden bg-[#ece2d0]"
                       >
                         <Image
                           src={img.src}
                           alt={img.alt}
                           fill
                           sizes="(max-width: 768px) 50vw, 25vw"
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
+                          className="object-cover group-hover:scale-110 transition-transform duration-[700ms]"
                         />
-                        <div className="absolute inset-0 bg-orange/0 group-hover:bg-orange/30 transition-all duration-500 flex items-center justify-center">
-                          <span className="text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">+</span>
+                        <div className="absolute inset-0 bg-[#d86c3f]/0 group-hover:bg-[#d86c3f]/40 transition-all duration-500 flex items-center justify-center">
+                          <span className="text-[#f5ede1] text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">+</span>
                         </div>
                       </button>
                     );
@@ -136,20 +137,21 @@ export default function VehicleWrap() {
         </div>
       </section>
 
-      {/* Lightbox */}
       {lightboxOpen && (
-        <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center" onClick={closeLightbox}>
-          <button onClick={closeLightbox} className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10">
+        <div className="fixed inset-0 z-[9999] bg-[#141210]/95 flex items-center justify-center" onClick={closeLightbox}>
+          <button onClick={closeLightbox} data-cursor="Schließen" className="absolute top-6 right-6 text-[#f5ede1]/70 hover:text-[#d86c3f] transition-colors z-10">
             <X className="w-8 h-8" />
           </button>
 
           <button onClick={(e) => { e.stopPropagation(); navigate(-1); }}
-            className="absolute left-4 md:left-8 text-white/50 hover:text-white transition-colors z-10">
+            data-cursor="Zurück"
+            className="absolute left-4 md:left-8 text-[#f5ede1]/50 hover:text-[#d86c3f] transition-colors z-10">
             <ChevronLeft className="w-10 h-10" />
           </button>
 
           <button onClick={(e) => { e.stopPropagation(); navigate(1); }}
-            className="absolute right-4 md:right-8 text-white/50 hover:text-white transition-colors z-10">
+            data-cursor="Weiter"
+            className="absolute right-4 md:right-8 text-[#f5ede1]/50 hover:text-[#d86c3f] transition-colors z-10">
             <ChevronRight className="w-10 h-10" />
           </button>
 
@@ -163,7 +165,7 @@ export default function VehicleWrap() {
             />
           </div>
 
-          <div className="absolute bottom-6 text-white/50 text-sm">
+          <div className="absolute bottom-6 text-[#f5ede1]/50 text-sm font-display italic">
             {lightboxIdx + 1} / {allImages.length}
           </div>
         </div>

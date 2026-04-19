@@ -1,112 +1,91 @@
-import Image from "next/image";
-import { MapPin, Phone, Mail, Globe } from "lucide-react";
+"use client";
+
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
+import Link from "next/link";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function SiteFooter() {
-  return (
-    <footer className="bg-grey-dark text-white">
-      {/* Orange bar */}
-      <div className="orange-bar" />
+  const ref = useRef<HTMLElement>(null);
 
-      {/* Main footer */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <Image src="/images/logo_mdgx_nav.png" alt="MediaGraphX" width={140} height={63}
-                className="h-10 w-auto brightness-0 invert" />
-            </div>
-            <p className="text-white/50 text-sm leading-relaxed">
-              Full-Service Werbeagentur aus Altenkirchen im Westerwald.
-              Kreativ, zuverlaessig, persoenlich. Seit 2002.
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const signoff = ref.current?.querySelector<HTMLElement>(".footer-signoff");
+      if (signoff) {
+        const split = new SplitType(signoff, { types: "chars", tagName: "span" });
+        gsap.from(split.chars, {
+          yPercent: 110,
+          opacity: 0,
+          stagger: 0.01,
+          duration: 1,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: signoff,
+            start: "top 90%",
+          },
+        });
+      }
+    }, ref);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <footer ref={ref} className="relative bg-[#141210] text-[#f5ede1] overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 pt-20 pb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pb-16 border-b border-[#f5ede1]/10">
+          <div className="col-span-2">
+            <div className="text-xs uppercase tracking-[0.3em] text-[#f5ede1]/50 mb-4">MediaGraphX</div>
+            <p className="text-lg max-w-sm text-[#f5ede1]/70 leading-relaxed">
+              Werbeagentur im Westerwald. Inhaber Timo Suess. <br />
+              Idee · Konzept · Design · seit 2002.
             </p>
           </div>
-
-          {/* Contact */}
           <div>
-            <h4 className="font-heading font-semibold text-sm uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-              <span className="w-1 h-3 bg-orange inline-block" />
-              Kontakt
-            </h4>
-            <div className="space-y-3 text-sm text-white/60">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-orange shrink-0 mt-0.5" />
-                <p>Sehrtenbachstrasse 20<br />57610 Altenkirchen</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-orange shrink-0" />
-                <a href="tel:+4926819825015" className="hover:text-orange transition-colors">02681.9825-15</a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-orange shrink-0" />
-                <a href="mailto:timo.suess@mdgx.de" className="hover:text-orange transition-colors">timo.suess@mdgx.de</a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-orange shrink-0" />
-                <span>www.mdgx.de</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div>
-            <h4 className="font-heading font-semibold text-sm uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-              <span className="w-1 h-3 bg-orange inline-block" />
-              Navigation
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                { href: "#start", label: "Start" },
-                { href: "#agentur", label: "Agentur" },
-                { href: "#leistungen", label: "Leistungen" },
-                { href: "#arbeiten", label: "Arbeiten" },
-                { href: "#kontakt", label: "Kontakt" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <a href={link.href}
-                    className="text-white/60 hover:text-orange transition-colors text-sm">{link.label}</a>
-                </li>
-              ))}
+            <div className="text-xs uppercase tracking-[0.3em] text-[#f5ede1]/50 mb-4">Seiten</div>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#start" data-cursor="Start" className="link-underline hover:text-[#d86c3f] transition-colors">Start</a></li>
+              <li><a href="#agentur" data-cursor="Über" className="link-underline hover:text-[#d86c3f] transition-colors">Agentur</a></li>
+              <li><a href="#leistungen" data-cursor="Leistungen" className="link-underline hover:text-[#d86c3f] transition-colors">Leistungen</a></li>
+              <li><a href="#arbeiten" data-cursor="Arbeiten" className="link-underline hover:text-[#d86c3f] transition-colors">Arbeiten</a></li>
+              <li><a href="#kontakt" data-cursor="Kontakt" className="link-underline hover:text-[#d86c3f] transition-colors">Kontakt</a></li>
             </ul>
           </div>
-
-          {/* Leistungen */}
           <div>
-            <h4 className="font-heading font-semibold text-sm uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-              <span className="w-1 h-3 bg-orange inline-block" />
-              Leistungen
-            </h4>
-            <ul className="space-y-2.5">
-              {["Webdesign", "Logoentwicklung", "Corporate Design", "Printwerbung", "SEO", "Fotografie"].map((s) => (
-                <li key={s}>
-                  <a href="#leistungen" className="text-white/60 hover:text-orange transition-colors text-sm">{s}</a>
-                </li>
-              ))}
+            <div className="text-xs uppercase tracking-[0.3em] text-[#f5ede1]/50 mb-4">Rechtlich</div>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/impressum" data-cursor="Impressum" className="link-underline hover:text-[#d86c3f] transition-colors">Impressum</Link></li>
+              <li><Link href="/datenschutz" data-cursor="Datenschutz" className="link-underline hover:text-[#d86c3f] transition-colors">Datenschutz</Link></li>
+              <li><Link href="/fahrzeugbeschriftung" data-cursor="Fahrzeuge" className="link-underline hover:text-[#d86c3f] transition-colors">Fahrzeugbeschriftung</Link></li>
             </ul>
           </div>
         </div>
 
-        {/* Newsletter / CTA Bar */}
-        <div className="mt-14 bg-orange rounded-sm p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <p className="font-heading font-bold text-white text-lg">Neues Projekt? Sprechen Sie uns an!</p>
-            <p className="text-white/70 text-sm">Wir beraten Sie gerne - kostenlos und unverbindlich.</p>
+        <div className="py-16 md:py-24">
+          <div className="footer-signoff font-display italic font-light leading-[0.85] tracking-[-0.03em] text-[clamp(80px,18vw,320px)] text-[#f5ede1]">
+            mediagraphx
           </div>
-          <a href="#kontakt" className="shrink-0 px-8 py-3 bg-white text-orange font-heading font-bold text-sm uppercase tracking-widest hover:bg-grey-dark hover:text-white transition-all duration-300">
-            Kontakt
-          </a>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/40 text-xs">
-            &copy; {new Date().getFullYear()} MediaGraphX. Alle Rechte vorbehalten.
-          </p>
-          <div className="flex gap-6 text-xs text-white/40">
-            <a href="#" className="hover:text-orange transition-colors">Impressum</a>
-            <a href="#" className="hover:text-orange transition-colors">Datenschutz</a>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-[#f5ede1]/60">
+          <div>© {new Date().getFullYear()} MediaGraphX · Timo Suess · Altenkirchen</div>
+          <div className="flex items-center gap-2">
+            <span>Made with</span>
+            <span className="text-[#d86c3f]">♥</span>
+            <span>by</span>
+            <a
+              href="https://superbrand.marketing"
+              target="_blank"
+              rel="noopener"
+              data-cursor="SUPERBRAND"
+              className="link-underline hover:text-[#6cbe45] transition-colors"
+            >
+              SUPERBRAND.marketing
+            </a>
+            <span className="hidden md:inline">– Dein Superheld für deine Werbung.</span>
           </div>
         </div>
       </div>
